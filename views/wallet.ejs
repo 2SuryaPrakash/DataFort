@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Cards</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+    }
+
+    .card-container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      width: 220px;
+    }
+
+    .card {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      text-decoration: none;
+      color: #333;
+      transition: background-color 0.2s ease;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .card:hover {
+      background-color: #f1f1f1;
+    }
+
+    .card img {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-container">
+    <% if(locals.wallets){ %>
+        <% for(var i=0;i<wallets;i++){ %>
+            <a href="/upload_file" class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjtIqc3HwZEVGgE4QDuI80950708UurqThkA&s" alt="Instagram">
+                <span>Wallet <%= i+1 %></span>
+                <br/>
+            </a>
+        <% }} %>
+  </div>
+</body>
+</html>

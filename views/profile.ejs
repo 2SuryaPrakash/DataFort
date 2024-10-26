@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+    }
+
+    .profile-container {
+      width: 100%;
+      max-width: 500px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .wallets {
+      margin-top: 20px;
+    }
+
+    .wallet {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .wallet:hover {
+      background-color: #f1f1f1;
+    }
+
+    .wallet-name {
+      font-weight: bold;
+    }
+
+    .popup, .result-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      width: 300px;
+    }
+
+    .popup-content input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .popup-content button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .popup-content button:hover {
+      background-color: #45a049;
+    }
+
+    .result-popup-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      width: 300px;
+    }
+
+    .result-popup-content p {
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    .close-button {
+      padding: 10px 20px;
+      background-color: #f44336;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-button:hover {
+      background-color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-container">
+    <h2>User Profile</h2>
+    <p><strong>Username:</strong><%= name %></p>
+    <p><strong>Email:</strong><%= email %></p>
+
+    <div class="wallets">
+      <% if(locals.wallet){ %>
+      <h3>Your Wallets:</h3>
+
+      <!-- Wallet list -->
+       <% for(var i=0;i<wallet;i++){ %>
+      <div class="wallet" onclick="openPopup('wallet1')">
+        <span class="wallet-name">Wallet <%= i+1 %></span>
+        <span>Public Key: <%= pubkey[i] %></span>
+      </div>
+      <% }} %>
+      <div class="wallet" onclick="openPopup('wallet2')">
+        <span class="wallet-name">Wallet 2</span>
+        <span>Public Key: DEF456LMN</span>
+      </div>
+
+      <div class="wallet" onclick="openPopup('wallet3')">
+        <span class="wallet-name">Wallet 3</span>
+        <span>Public Key: GHI789OPQ</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Password prompt popup -->
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <h3>Enter Password</h3>
+      <input type="password" id="passwordInput" placeholder="Password">
+      <button onclick="authenticate()">Submit</button>
+    </div>
+  </div>
+
+  <!-- Result popup for displaying private key or error -->
+  <div class="result-popup" id="resultPopup">
+    <div class="result-popup-content" id="resultPopupContent">
+      <p id="resultMessage"></p>
+      <button class="close-button" onclick="closeResultPopup()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    let currentWallet = null;
+
+    // Function to open the password input popup
+    function openPopup(walletId) {
+      currentWallet = walletId;
+      document.getElementById('popup').style.display = 'flex';
+    }
+
+    // Function to authenticate and show the private key or error message
+    function authenticate() {
+      const password = document.getElementById('passwordInput').value;
+
+      // Example password validation (replace with real authentication)
+      const validPassword = "1234";  // Replace with real password logic
+
+      // Define private keys for each wallet
+      const privateKeys = {
+        wallet1: 'PrivateKeyForWallet1: 123ABC',
+        wallet2: 'PrivateKeyForWallet2: 456DEF',
+        wallet3: 'PrivateKeyForWallet3: 789GHI'
+      };
+
+      if (password === validPassword) {
+        // Display private key if password is correct
+        document.getElementById('resultMessage').innerText = `Private Key: ${privateKeys[currentWallet]}`;
+        closePopup();
+        document.getElementById('resultPopup').style.display = 'flex';
+      } else {
+        // Display error message if password is incorrect
+        document.getElementById('resultMessage').innerText = 'Incorrect password. Please try again.';
+        closePopup();
+        document.getElementById('resultPopup').style.display = 'flex';
+      }
+    }
+
+    // Function to close the password input popup
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+      document.getElementById('passwordInput').value = ''; // Clear the input field
+    }
+
+    // Function to close the result popup
+    function closeResultPopup() {
+      document.getElementById('resultPopup').style.display = 'none';
+    }
+
+    // Close the password popup when clicking outside it
+    window.onclick = function(event) {
+      const popup = document.getElementById('popup');
+      if (event.target === popup) {
+        closePopup();
+      }
+    };
+  </script>
+</body>
+</html>
