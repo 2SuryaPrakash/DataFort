@@ -247,6 +247,9 @@ const app = express();
 const port = 3000;
 let code = 1000;
 let user_email="";
+let pubkey_arr=[];
+let prikey_arr=[];
+let use_name="";
 // Get current directory name
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -270,8 +273,8 @@ const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   email: { type: String, unique: true, required: true },
-  privatekey: { type: String, unique: true, required: true },
-  publickey: {type: String, unique: true, required: true },
+  privatekey: { type: [String], unique: true, required: true },
+  publickey: {type: [String], unique: true, required: true },
 });
 
 const User = mongoose.model("User", userSchema);
@@ -298,7 +301,7 @@ app.get("/upload_file", (req, res) => {
 // Helper function to handle login (Admin or Regular User)
 const handleLogin = (user, password, res, isAdmin) => {
   const { fName, email } = user;
-  const page = isAdmin ? "admin_open" : "upload";
+  const page = isAdmin ? "admin_open" : "wallet";
 
   bcrypt.compare(password, user.password, (err, result) => {
     if (err) {
@@ -307,11 +310,7 @@ const handleLogin = (user, password, res, isAdmin) => {
     }
 
     if (result) {
-      res.render(`${page}`, {
-        Name: fName,
-        email: email,
-        books: [], // Replace with books fetched from DB if necessary
-      });
+      res.redirect(`${page}`);
     } else {
       res.render("login", { response: "Invalid Credentials. Try Again." });
     }
@@ -322,7 +321,7 @@ const handleLogin = (user, password, res, isAdmin) => {
 app.post("/login", async (req, res) => {
   const { Username, Password } = req.body;
   const isAdmin = Username === "Admin@iitdh.ac.in";
-
+  use_name=Username;
   try {
     // Fetch user from the database
     const user = await User.findOne({ username: Username });
@@ -363,9 +362,10 @@ app.post("/signup", async (req, res) => {
 
     // Hash the password before storing
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    prikey_arr=[prikey]
+    pubkey_arr=[pubkey]
     // Create and save a new user
-    const newUser = new User({ username: username, password: hashedPassword, email: email, privatekey: prikey, publickey: pubkey });
+    const newUser = new User({ username: username, password: hashedPassword, email: email, privatekey: prikey_arr, publickey: pubkey_arr });
     await newUser.save();
     res.redirect("/upload_file"); // Redirect to login after successful signup
   } catch (err) {
@@ -448,26 +448,6 @@ app.post("/code",(req,res)=>{
 
 app.post("/reset",async (req,res)=>{
     const new_pass = req.body.Password;
-    // bcrypt.hash(new_pass,saltRounds,async (err,hash)=>{
-    //     if(err){
-    //         console.error("Error: ",err);
-    //     }
-    //     else{
-    //         try{
-    //             db.query('UPDATE users SET password = ? WHERE email = ?',[hash,r_email],function(err,result){
-    //                 if(err){
-    //                     console.error("Error: ",err);
-    //                 }
-    //                 else{
-    //                     res.redirect("/");
-    //                 }
-    //             });
-    //         }
-    //         catch(err){
-    //             console.error("Error: ",err);
-    //         }
-    //     }
-    // });
     try{
       const hash = await bcrypt.hash(new_pass, 10);
 
@@ -487,6 +467,17 @@ app.post("/reset",async (req,res)=>{
       console.error("Error: ", err);
       res.status(500).send("Server Error");
     }
+});
+
+app.get("/wallet",async (req,res)=>{
+  try{
+      const wallet = await User.findOne({username: use_name});
+      const no_of_keys=wallet.privatekey.length;
+      res.render("wallet",{wallets: no_of_keys});
+  }
+  catch(err){
+    res.redirect("/");
+  }
 });
 
 // Start the server

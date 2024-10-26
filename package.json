@@ -15,8 +15,10 @@
     "bcryptjs": "^2.4.3",
     "cron": "^3.1.7",
     "ejs": "^3.1.10",
+    "ethers": "^6.13.4",
     "express": "^4.21.1",
     "mongoose": "^8.7.3",
-    "nodemailer": "^6.9.15"
+    "nodemailer": "^6.9.15",
+    "web3": "^4.14.0"
   }
 }
