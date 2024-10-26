@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload UI with Popups</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 600px;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-box {
+            width: 100%;
+            padding: 20px;
+            border: 2px dashed #b3b3b3;
+            border-radius: 10px;
+            text-align: center;
+            color: #777;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .upload-box:hover {
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+        .upload-box svg {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+            fill: #007bff;
+        }
+
+        .browse-button {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .file-list {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .file-item img {
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        .file-item p {
+            flex-grow: 1;
+            margin: 0;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .file-item .delete-icon {
+            cursor: pointer;
+            color: #ff4d4d;
+        }
+
+        .submit-button {
+            display: none;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .modal-content button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="upload-container">
+    <div class="upload-box" id="uploadBox">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <p>Drag and Drop files to upload<br>or</p>
+        <label class="browse-button">
+            Browse
+            <input type="file" id="fileInput" multiple style="display: none;">
+        </label>
+        <p style="font-size: 12px; color: #aaa;">Supported files: JPG, PNG, PDF</p>
+    </div>
+    
+    <div class="file-list" id="fileList">
+        <!-- Uploaded files will appear here -->
+    </div>
+
+    <button class="submit-button" id="submitButton">Submit</button>
+</div>
+
+<!-- Modal Popup -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h3>File Details</h3>
+        <p id="modalFileName"></p>
+        <label for="fileDescription">Description:</label>
+        <textarea id="fileDescription" rows="3"></textarea>
+        <label for="fileCategory">Category:</label>
+        <input type="text" id="fileCategory">
+        <button id="nextButton">Next</button>
+    </div>
+</div>
+
+<script>
+    const uploadBox = document.getElementById('uploadBox');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const submitButton = document.getElementById('submitButton');
+    const modal = document.getElementById('modal');
+    const modalFileName = document.getElementById('modalFileName');
+    const nextButton = document.getElementById('nextButton');
+    const fileDescription = document.getElementById('fileDescription');
+    const fileCategory = document.getElementById('fileCategory');
+    let filesArray = [];
+    let currentFileIndex = 0;
+
+    fileInput.addEventListener('change', (event) => handleFiles(event.target.files));
+    uploadBox.addEventListener('dragover', (event) => event.preventDefault());
+    uploadBox.addEventListener('drop', (event) => {
+        event.preventDefault();
+        handleFiles(event.dataTransfer.files);
+    });
+
+    function handleFiles(files) {
+        Array.from(files).forEach(file => {
+            filesArray.push(file);
+            const fileItem = document.createElement('div');
+            fileItem.classList.add('file-item');
+
+            const fileIcon = document.createElement('img');
+            fileIcon.src = 'file-icon.png';  // Replace with actual icon
+            fileIcon.alt = 'file icon';
+
+            const fileName = document.createElement('p');
+            fileName.textContent = file.name;
+
+            const deleteIcon = document.createElement('span');
+            deleteIcon.classList.add('delete-icon');
+            deleteIcon.textContent = '✖';
+            deleteIcon.addEventListener('click', () => {
+                fileList.removeChild(fileItem);
+                filesArray = filesArray.filter(f => f !== file);
+                if (filesArray.length === 0) submitButton.style.display = 'none';
+            });
+
+            fileItem.appendChild(fileIcon);
+            fileItem.appendChild(fileName);
+            fileItem.appendChild(deleteIcon);
+            fileList.appendChild(fileItem);
+        });
+        submitButton.style.display = 'block';
+    }
+
+    submitButton.addEventListener('click', () => {
+        if (filesArray.length > 0) {
+            currentFileIndex = 0;
+            showModalForFile(filesArray[currentFileIndex]);
+        }
+    });
+
+    function showModalForFile(file) {
+        modalFileName.textContent = `File: ${file.name}`;
+        fileDescription.value = '';
+        fileCategory.value = '';
+        modal.style.display = 'flex';
+    }
+
+    nextButton.addEventListener('click', () => {
+        const details = {
+            name: filesArray[currentFileIndex].name,
+            description: fileDescription.value,
+            category: fileCategory.value
+        };
+        console.log(details);  // Save or process details as needed
+
+        currentFileIndex++;
+        if (currentFileIndex < filesArray.length) {
+            showModalForFile(filesArray[currentFileIndex]);
+        } else {
+            modal.style.display = 'none';
+            alert('All files processed!');
+        }
+    });
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) modal.style.display = 'none';
+    });
+</script>
+
+</body>
+</html>
