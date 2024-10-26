@@ -246,6 +246,7 @@ import cron from "cron";
 const app = express();
 const port = 3000;
 let code = 1000;
+let user_email="";
 // Get current directory name
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -378,7 +379,7 @@ app.post("/reset_password",async (req,res)=>{
   try{
         const resobj = await User.findOne({email: r_email});
         const result=resobj.email;
-        console.log(result);
+        user_email=result;
     if(result.length > 0){
     code = Math.floor(Math.random()*10000);
     let transporter = nodemailer.createTransport({
@@ -403,8 +404,8 @@ app.post("/reset_password",async (req,res)=>{
         </head>
         <body>
             <div style="display: flex; justify-content: center;">
-                <img src="https://election.iitdh.ac.in/static/media/logog.084b1a7a95f4bcd9fccd.png" width="150px" alt="Logo">
-                <h4 style="color: #89288f; font-size: xx-large;">Reset Password</h4>
+                <img src="https://i.ibb.co/8m2PTDw/DF-logo.jpg" width="150px" alt="Logo">
+                <h4 style="color: #89288f; font-size: xx-large;">&nbsp;Reset Password</h4>
             </div>
             <div style="text-align: center;">
                 <p style="font-size: x-large;">Secret Code</p>
@@ -427,7 +428,9 @@ app.post("/reset_password",async (req,res)=>{
   }
   catch(err){
     console.error("Error finding user:", err.message);
-    res.status(500).send("Server error. Try again later.");
+    res.render(__dirname+"/views/forgot_password.ejs",{
+      response: "User does not exist.",
+  });
   }
 });
 
@@ -441,6 +444,49 @@ app.post("/code",(req,res)=>{
           response: "Incorrect Code",
       });
   }
+});
+
+app.post("/reset",async (req,res)=>{
+    const new_pass = req.body.Password;
+    // bcrypt.hash(new_pass,saltRounds,async (err,hash)=>{
+    //     if(err){
+    //         console.error("Error: ",err);
+    //     }
+    //     else{
+    //         try{
+    //             db.query('UPDATE users SET password = ? WHERE email = ?',[hash,r_email],function(err,result){
+    //                 if(err){
+    //                     console.error("Error: ",err);
+    //                 }
+    //                 else{
+    //                     res.redirect("/");
+    //                 }
+    //             });
+    //         }
+    //         catch(err){
+    //             console.error("Error: ",err);
+    //         }
+    //     }
+    // });
+    try{
+      const hash = await bcrypt.hash(new_pass, 10);
+
+          // Update the password field
+          const result1 = await User.updateOne(
+            { email: user_email }, // Filter document by email
+            { $set: { password: hash } } // Update operation
+          );
+          if (result1.modifiedCount > 0) {
+            res.redirect("/");
+          } else {
+            res.status(400).send("Error updating password or user not found.");
+          }
+
+    }
+    catch(err){
+      console.error("Error: ", err);
+      res.status(500).send("Server Error");
+    }
 });
 
 // Start the server
