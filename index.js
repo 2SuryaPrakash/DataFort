@@ -240,6 +240,7 @@ import mongoose from "mongoose"; // MongoDB ODM
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import nodemailer from "nodemailer";
+import Web3 from 'web3';
 import cron from "cron";
 
 // Initialize express app
@@ -252,7 +253,7 @@ let prikey_arr=[];
 let use_name="";
 // Get current directory name
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
+const web3=new Web3();
 // Set the view engine to EJS
 app.set("view engine", "ejs");
 
@@ -317,6 +318,11 @@ const handleLogin = (user, password, res, isAdmin) => {
   });
 };
 
+function createNewKey(){
+  const keys=web3.eth.accounts.create();
+  return keys;
+}
+
 // Login Route
 app.post("/login", async (req, res) => {
   const { Username, Password } = req.body;
@@ -343,8 +349,9 @@ app.post("/signup", async (req, res) => {
   const username=req.body.name;
   const email=req.body.mail;
   const password=req.body.pswd;
-  const prikey=req.body.prikey;
-  const pubkey=req.body.pubkey;
+  const keys=createNewKey();
+  const prikey=keys.privateKey;
+  const pubkey=keys.address;
   // Log the incoming request data
   console.log("Signup request body:", req.body);
 
@@ -473,7 +480,12 @@ app.get("/wallet",async (req,res)=>{
   try{
       const wallet = await User.findOne({username: use_name});
       const no_of_keys=wallet.privatekey.length;
-      res.render("wallet",{wallets: no_of_keys});
+      if(no_of_keys>1){
+        res.render("wallet",{wallets: no_of_keys});
+      }
+      else{
+        res.redirect('/upload_file');
+      }
   }
   catch(err){
     res.redirect("/");
