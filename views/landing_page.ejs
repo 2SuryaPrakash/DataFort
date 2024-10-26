@@ -13,7 +13,7 @@
             font-family: 'Arial', sans-serif;
             overflow-x: hidden; 
             height: 100%;
-            background-repeat:no-repeat;
+            position: relative; /* Positioning context for absolute elements */
         }
 
         .header {
@@ -26,8 +26,8 @@
             right: 0;
             padding: 20px; 
             backdrop-filter: blur(10px); 
-            z-index: 1000;
             transition: background-color 0.5s ease; 
+            z-index: 1000; /* Ensure header is above other content */
         }
 
         .header.scrolled {
@@ -70,6 +70,20 @@
             50% { border-color: orange; }
         }
 
+        .container {
+            margin-top: 120px; /* Increased space below the fixed header */
+        }
+
+        .content {
+            margin-bottom: 40px; /* Space between rows */
+        }
+
+        .solutionIdeas {
+            font-size: 20px; /* Adjusted font size for readability */
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            color: white; /* Change text color for contrast */
+        }
+
         .web3-title {
             font-weight: bold;
             color: black; /* Changed to black */
@@ -108,24 +122,11 @@
             transform: scale(1.05); 
         }
 
-        .content {
-            margin-top: 50px;
-            position: relative; /* Position content relative */
-            left: 0; /* Align to left half */
-            width: 50%; /* Take half the width */
-            padding: 100px 20px 20px; /* Top padding to avoid header overlap */
-        }
-
-        .content p {
-            font-size: 20px;
-            max-width: 600px;
-            margin-bottom: 20px; /* Add space between paragraphs */
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-        }
-
-        .solutionIdeas {
-            font-size: 45px;
-            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        /* Responsive images */
+        .image {
+            max-width: 100%; /* Responsive images */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 10px; /* Rounded corners */
         }
     </style>
 </head>
@@ -137,17 +138,30 @@
             <a href="/signup" class="btn">Sign Up</a>
         </div>
     </div>
-
-    <div class="content">
-        <p style="display: inline-block;color:black;font-family: monospace;font-size: 40px;" id="solution-title" class="solution-title">Our Innovative Solution</p>
-        <p class="solutionIdeas">We propose creating a secure private blockchain system that enables organizations to effectively track and manage employee activities. This solution guarantees the integrity of sensitive information through a tamper-proof ledger, protecting both general data and confidential records like personal and financial information.</p>
-        <p class="solutionIdeas">By employing advanced encryption methods and role-based access control, we ensure that only authorized personnel can access critical data. Additionally, real-time monitoring and automated processes via smart contracts streamline HR functions, alerting users of compliance issues while offering integration with existing systems for enhanced analytics and insights.</p>
-
-        <h2 class="web3-title" style="display: inline-block;color:black;font-family: monospace;font-size: 40px;">The Promise of Web3</h2>
-        <p>Web3 represents the next generation of the internet, built on decentralized networks that empower users with control over their own data. Unlike the traditional web, where users are often subject to the whims of large corporations, Web3 aims to return ownership and sovereignty to individuals. This shift enables more equitable participation in online communities and creates new economic opportunities for everyone involved.</p>
-        <p>The technology behind Web3, including blockchain and smart contracts, facilitates trustless interactions between parties without the need for intermediaries. By leveraging these advancements, organizations can develop innovative solutions that enhance transparency and security. As more people engage with decentralized applications, the potential for transformative change in various industries becomes increasingly evident.</p>
+    <div class="container">
+        <!-- First Row -->
+        <div class="row content">
+            <div class="col-md-6">
+                <p class="solution-title" style="font-family: monospace;font-size: 40px;color:black">Our Innovative Solution</p>
+                <p class="solutionIdeas">We propose creating a secure private blockchain system that enables organizations to effectively track and manage employee activities. This solution guarantees the integrity of sensitive information through a tamper-proof ledger, protecting both general data and confidential records like personal and financial information.</p>
+                <p class="solutionIdeas">By employing advanced encryption methods and role-based access control, we ensure that only authorized personnel can access critical data. Additionally, real-time monitoring and automated processes via smart contracts streamline HR functions, alerting users of compliance issues while offering integration with existing systems for enhanced analytics and insights.</p>
+            </div>
+            <div class="col-md-6">
+                <img src="your-image-source.jpg" alt="Your Image" class="image"> <!-- Replace with your image source -->
+            </div>
+        </div>
+        <!-- Second Row -->
+        <div class="row content">
+            <div class="col-md-6">
+                <img src="your-second-image-source.jpg" alt="Your Second Image" class="image"> <!-- Replace with your second image source -->
+            </div>
+            <div class="col-md-6">
+                <h2 class="web3-title" style="font-family: monospace;font-size: 40px;color:black;">The Promise of Web3</h2>
+                <p class="solutionIdeas">Web3 represents the next generation of the internet, built on decentralized networks that empower users with control over their own data. Unlike the traditional web, where users are often subject to the whims of large corporations, Web3 aims to return ownership and sovereignty to individuals. This shift enables more equitable participation in online communities and creates new economic opportunities for everyone involved.</p>
+                <p class="solutionIdeas">The technology behind Web3, including blockchain and smart contracts, facilitates trustless interactions between parties without the need for intermediaries. By leveraging these advancements, organizations can develop innovative solutions that enhance transparency and security. As more people engage with decentralized applications, the potential for transformative change in various industries becomes increasingly evident.</p>
+            </div>
+        </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         window.addEventListener('scroll', function() {
@@ -160,7 +174,7 @@
         });
 
         // Hide caret after animation
-        const solutionTitle = document.getElementById('solution-title');
+        const solutionTitle = document.querySelector('.solution-title');
         setTimeout(() => {
             solutionTitle.style.borderRight = 'none'; // Remove caret
             solutionTitle.style.animation = 'none'; // Stop blinking animation

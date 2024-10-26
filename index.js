@@ -331,7 +331,7 @@ app.get("/forgot_password", (req, res) => {
 });
 
 app.get("/upload_file", (req, res) => {
-  res.render("upload", { response: "" });
+  res.render("upload", { name: use_name });
 });
 
 // Helper function to handle login (Admin or Regular User)
@@ -530,6 +530,7 @@ app.get("/wallet",async (req,res)=>{
 
 app.get("/profile",async (req,res)=>{
   const wallets1=await User.findOne({username: use_name}); 
+  user_email=wallets1.email;
   res.render("profile",{
     name: use_name,
     email: user_email,

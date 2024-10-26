@@ -1,27 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>File Upload UI with Popups</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f7fa;
+            background-color: #e9ecef;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         header {
-            width: 100%;
             background-color: #343a40;
             color: white;
             padding: 15px 0;
@@ -32,50 +24,120 @@
         }
 
         .content {
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             flex: 1;
             padding: 20px;
+
+        }
+
+        .title {
+            margin: 0;
+            font-size: 48px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+            /* Prevent line breaks */
+            overflow: hidden;
+            /* Hides the overflow */
+            border-right: .15em solid orange;
+            /* Cursor effect */
+            animation: typing-title1 4s steps(12), blink-caret 0.75s step-end infinite;
+            /* Animation */
+        }
+
+        @keyframes typing-title1 {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 12ch;
+            }
+
+            /* Adjust to the number of characters in "DataFort Inc." */
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent;
+            }
+
+            50% {
+                border-color: orange;
+            }
         }
 
         .upload-container {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            width: 600px;
-            padding: 20px;
+            flex-direction: column;
+            background-color: #f8f9fa;
+            /* Light background for better contrast */
             border-radius: 15px;
-            background-color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            /* Enhanced shadow */
+            padding: 30px;
+            padding-bottom: 0;
+            /* Increased padding */
+            width: 80%;
             margin-top: 40px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            /* Transition for hover effect */
+        }
+
+        .upload-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.25);
+            /* Darker shadow on hover */
         }
 
         .upload-box {
             width: 100%;
-            padding: 20px;
-            border: 2px dashed #b3b3b3;
+            border: 2px dashed #89278d;
+            /* Main border color */
             border-radius: 10px;
+            padding: 30px;
+            /* Increased padding for better content spacing */
             text-align: center;
-            color: #777;
             margin-bottom: 20px;
-            transition: border-color 0.3s, color 0.3s;
+            color: #30128c;
+            font-size: 22px;
+            /* Slightly reduced font size for better fit */
+            transition: border-color 0.3s, background-color 0.3s;
+            /* Smooth transition */
+            background-color: #fff;
+            /* White background for contrast */
         }
 
         .upload-box:hover {
-            border-color: #007bff;
-            color: #007bff;
+            border-color: #30128c;
+            /* Darker border on hover */
+            background-color: #f1f1f1;
+            /* Light grey background on hover */
+            color: #661869;
         }
+
 
         .browse-button {
             display: inline-block;
+            font-size: 20px;
             padding: 10px 15px;
-            margin-top: 10px;
-            background-color: #007bff;
+            background-color: #89278d;
             color: white;
             border-radius: 5px;
             cursor: pointer;
+            margin-bottom: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .browse-button:hover {
+            background-color: #661869;
         }
 
         .file-list {
@@ -91,28 +153,42 @@
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 10px;
-            font-size: 14px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .file-item:hover {
+            background-color: #e9ecef;
         }
 
         .file-item p {
             margin: 0;
-            color: #333;
-            word-break: break-word;
+            color: #261067;
         }
 
         .file-item .delete-icon {
             cursor: pointer;
-            color: #ff4d4d;
+            color: #dc3545;
+            transition: color 0.3s;
+        }
+
+        .file-item .delete-icon:hover {
+            color: #c82333;
         }
 
         .submit-button {
             display: none;
             padding: 10px 20px;
-            background-color: #28a745;
+            background-color: #30128c;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background-color: #261067;
         }
 
         .modal {
@@ -131,7 +207,7 @@
         .modal-content {
             background-color: white;
             padding: 20px;
-            width: auto;
+            width: 600px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
@@ -153,6 +229,11 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-content button:hover {
+            background-color: #0056b3;
         }
 
         .error {
@@ -160,171 +241,235 @@
             font-size: 12px;
             display: none;
         }
+
+        .submitBtn {
+            width: 100px;
+            font-size: 20px;
+            background-color: #89278d;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        .submitBtn:hover {
+            background-color: #661869;
+            color: white;
+        }
+
+        .title {
+            margin: 0;
+            font-size: 48px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .file-name {
+            font-size: 25px;
+            white-space: nowrap;
+            /* Prevents wrapping */
+            overflow: hidden;
+            /* Hides overflow content */
+            text-overflow: ellipsis;
+            /* Adds ellipsis for overflowed text */
+            padding: 10px;
+            /* Adds some padding for better spacing */
+        }
+
+        .finalMessage{
+            font-size: 20px;
+        }
+        .file-name:hover, .finalMessage:hover {
+            color: #661869;
+        }
+        #nextButton{
+            margin-top: 15px;
+            background-color: #89278d;
+        }
+        #nextButton:hover{
+            background-color: #661869;
+        }
     </style>
 </head>
+
 <body>
 
-<header>
-    <div class="container">
-        <div class="d-flex flex-row justify-content-between align-items-center gap-3">
-            <div>
-                <a href="/" class="logo">
-                    <img src="https://i.ibb.co/8m2PTDw/DF-logo.jpg" alt="DF-logo" height="50" />
-                </a>
-            </div>
-            <div>
-                <a href="/profile"><button>Profile</button></a>
+    <header>
+        <div class="container">
+            <div class="d-flex flex-row justify-content-between align-items-center">
+                <div>
+                    <a href="/" class="logo">
+                        <img src="https://i.ibb.co/8m2PTDw/DF-logo.jpg" alt="DF-logo" height="50" />
+                    </a>
+                </div>
+                <div class="teamName">
+                    <p class="title">DataFort Inc.</p>
+                </div>
+                <div>
+                    <a href="/profile" class="nav-link text-white">
+                        <svg class="bi d-block mx-auto mb-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                            <path fill-rule="evenodd"
+                                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                        </svg>
+                        <%= name %>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>    
-</header>
+    </header>
 
-<div class="content">
-    <div class="upload-container">
-        <div class="upload-box" id="uploadBox">
-            <p>Drag and Drop files to upload<br>or</p>
-            <label class="browse-button">
-                Browse
-                <input type="file" id="fileInput" multiple style="display: none;">
-            </label>
-            <p style="font-size: 12px; color: #aaa;">Supported files: JPG, PNG, PDF</p>
+    <div class="content">
+        <div class="upload-container">
+            <div class="upload-box" id="uploadBox">
+                <p>Drag and Drop files to upload<br>or</p>
+                <label class="browse-button">
+                    Browse
+                    <input type="file" id="fileInput" multiple style="display: none;">
+                </label>
+                <p style="font-size: 12px; color: #aaa;">Supported files: JPG, PNG, PDF</p>
+            </div>
+
+            <div class="file-list" id="fileList"></div>
+            <button class="submit-button" style="margin-bottom: 20px;" id="submitButton">Submit</button>
         </div>
-
-        <div class="file-list" id="fileList"></div>
-        <button class="submit-button" id="submitButton">Submit</button>
     </div>
-</div>
 
-<!-- Modal Popup -->
-<div class="modal" id="modal">
-    <div class="modal-content">
-        <h3>File Details</h3>
-        <p id="modalFileName"></p>
-        <label for="fileDescription">Description:</label>
-        <textarea id="fileDescription" rows="3"></textarea>
-        <span class="error" id="descriptionError">Description is required.</span>
-        <label for="fileCategory">Category:</label>
-        <input type="text" id="fileCategory">
-        <span class="error" id="categoryError">Category is required.</span>
-        <button id="nextButton">Next</button>
+
+    <!-- Modal Popup -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3 style="font-size: 40px;text-align: center;color: #261067;">File Details</h3>
+            <p id="modalFileName" class="file-name"></p>
+            <label for="fileCategory" style="font-size: 30px;color: #661869;">Save as:</label>
+            <input type="text" id="fileCategory" style="border: 1px solid #0056b3;">
+            <span class="error" id="categoryError" style="font-size: 15px">Name is required.</span>
+            <label for="fileDescription" style="font-size: 30px;color:#661869">Description:</label>
+            <textarea id="fileDescription" rows="3" style="border: 1px solid #0056b3;"></textarea>
+            <span class="error" id="descriptionError" style="font-size: 15px;">Description is required.</span>
+            <button id="nextButton" >Next</button>
+        </div>
     </div>
-</div>
 
-<!-- Final Submit Modal -->
-<div class="modal" id="finalModal">
-    <div class="modal-content">
-        <h3>Submit All Files</h3>
-        <button id="finalSubmitButton">Submit All</button>
+    <!-- Final Submit Modal -->
+    <div class="modal" id="finalModal">
+        <div class="modal-content">
+            <h1>Submit All Files</h1>
+            <p class="finalMessage">The Name(s) and Description(s) have been successfully saved.</p>
+            <button id="finalSubmitButton" style="background-color: #261067;">Submit All</button>
+        </div>
     </div>
-</div>
 
-<script>
-    const uploadBox = document.getElementById('uploadBox');
-    const fileInput = document.getElementById('fileInput');
-    const fileList = document.getElementById('fileList');
-    const submitButton = document.getElementById('submitButton');
-    const modal = document.getElementById('modal');
-    const finalModal = document.getElementById('finalModal');
-    const modalFileName = document.getElementById('modalFileName');
-    const nextButton = document.getElementById('nextButton');
-    const finalSubmitButton = document.getElementById('finalSubmitButton');
-    const descriptionError = document.getElementById('descriptionError');
-    const categoryError = document.getElementById('categoryError');
-    let filesArray = [];
-    let currentFileIndex = 0;
+    <script>
+        const uploadBox = document.getElementById('uploadBox');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const submitButton = document.getElementById('submitButton');
+        const modal = document.getElementById('modal');
+        const finalModal = document.getElementById('finalModal');
+        const modalFileName = document.getElementById('modalFileName');
+        const nextButton = document.getElementById('nextButton');
+        const finalSubmitButton = document.getElementById('finalSubmitButton');
+        const descriptionError = document.getElementById('descriptionError');
+        const categoryError = document.getElementById('categoryError');
+        let filesArray = [];
+        let currentFileIndex = 0;
 
-    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
-    uploadBox.addEventListener('dragover', (e) => e.preventDefault());
-    uploadBox.addEventListener('drop', (e) => {
-        e.preventDefault();
-        handleFiles(e.dataTransfer.files);
-    });
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+        uploadBox.addEventListener('dragover', (e) => e.preventDefault());
+        uploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            handleFiles(e.dataTransfer.files);
+        });
 
-    function handleFiles(files) {
-        Array.from(files).forEach(file => {
-            filesArray.push(file);
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                filesArray.push(file);
 
-            const fileName = file.name;
-            const fileType = file.type || 'Unknown type';
-            const fileSize = (file.size / 1024).toFixed(2);
-            const lastModified = new Date(file.lastModified).toLocaleDateString();
+                const fileName = file.name;
+                const fileType = file.type || 'Unknown type';
+                const fileSize = (file.size / 1024).toFixed(2);
+                const lastModified = new Date(file.lastModified).toLocaleDateString();
 
-            const fileItem = document.createElement('div');
-            fileItem.classList.add('file-item');
-            fileItem.innerHTML = `
+                const fileItem = document.createElement('div');
+                fileItem.classList.add('file-item');
+                fileItem.innerHTML = `
                 <p>${fileName} - ${fileType} - ${fileSize} KB - Last Modified: ${lastModified}</p>
                 <span class="delete-icon">✖</span>
             `;
 
-            fileItem.querySelector('.delete-icon').addEventListener('click', () => {
-                filesArray = filesArray.filter(f => f !== file);
-                fileList.removeChild(fileItem);
-                if (filesArray.length === 0) {
-                    submitButton.style.display = 'none';
-                }
+                fileItem.querySelector('.delete-icon').addEventListener('click', () => {
+                    filesArray = filesArray.filter(f => f !== file);
+                    fileList.removeChild(fileItem);
+                    if (filesArray.length === 0) {
+                        submitButton.style.display = 'none';
+                    }
+                });
+
+                fileList.appendChild(fileItem);
+                submitButton.style.display = 'block';
             });
-
-            fileList.appendChild(fileItem);
-            submitButton.style.display = 'block';
-        });
-    }
-
-    submitButton.addEventListener('click', () => {
-        if (filesArray.length > 0) {
-            currentFileIndex = 0;
-            showModalForFile(filesArray[currentFileIndex]);
-        }
-    });
-
-    function showModalForFile(file) {
-        modalFileName.textContent = file.name;
-        document.getElementById('fileDescription').value = '';
-        document.getElementById('fileCategory').value = '';
-        descriptionError.style.display = 'none';
-        categoryError.style.display = 'none';
-        modal.style.display = 'flex';
-    }
-
-    nextButton.addEventListener('click', () => {
-        const description = document.getElementById('fileDescription').value.trim();
-        const category = document.getElementById('fileCategory').value.trim();
-
-        if (!description) {
-            descriptionError.style.display = 'block';
-        } else {
-            descriptionError.style.display = 'none';
         }
 
-        if (!category) {
-            categoryError.style.display = 'block';
-        } else {
-            categoryError.style.display = 'none';
-        }
-
-        if (description && category) {
-            console.log('Description:', description);
-            console.log('Category:', category);
-            modal.style.display = 'none';
-
-            currentFileIndex++;
-            if (currentFileIndex < filesArray.length) {
+        submitButton.addEventListener('click', () => {
+            if (filesArray.length > 0) {
+                currentFileIndex = 0;
                 showModalForFile(filesArray[currentFileIndex]);
-            } else {
-                finalModal.style.display = 'flex';
             }
-        }
-    });
+        });
 
-    finalSubmitButton.addEventListener('click', () => {
-        console.log('Submitting all files with their details...');
-        console.log(filesArray);
-        // Implement the actual submission logic here (e.g., send files to server)
-        finalModal.style.display = 'none';
-        filesArray = [];
-        fileList.innerHTML = '';
-        submitButton.style.display = 'none';
-    });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        function showModalForFile(file) {
+            modalFileName.textContent = file.name;
+            document.getElementById('fileDescription').value = '';
+            document.getElementById('fileCategory').value = '';
+            descriptionError.style.display = 'none';
+            categoryError.style.display = 'none';
+            modal.style.display = 'flex';
+        }
+
+        nextButton.addEventListener('click', () => {
+            const description = document.getElementById('fileDescription').value.trim();
+            const category = document.getElementById('fileCategory').value.trim();
+
+            if (!description) {
+                descriptionError.style.display = 'block';
+            } else {
+                descriptionError.style.display = 'none';
+            }
+
+            if (!category) {
+                categoryError.style.display = 'block';
+            } else {
+                categoryError.style.display = 'none';
+            }
+
+            if (description && category) {
+                console.log('Description:', description);
+                console.log('Category:', category);
+                modal.style.display = 'none';
+
+                currentFileIndex++;
+                if (currentFileIndex < filesArray.length) {
+                    showModalForFile(filesArray[currentFileIndex]);
+                } else {
+                    finalModal.style.display = 'flex';
+                }
+            }
+        });
+
+        finalSubmitButton.addEventListener('click', () => {
+            console.log('Submitting all files with their details...');
+            console.log(filesArray);
+            // Implement the actual submission logic here (e.g., send files to server)
+            finalModal.style.display = 'none';
+            filesArray = [];
+            fileList.innerHTML = '';
+            submitButton.style.display = 'none';
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
