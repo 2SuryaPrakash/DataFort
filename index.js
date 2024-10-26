@@ -239,11 +239,13 @@ import bcrypt from "bcrypt"; // For password hashing and comparison
 import mongoose from "mongoose"; // MongoDB ODM
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import nodemailer from "nodemailer";
+import cron from "cron";
 
 // Initialize express app
 const app = express();
 const port = 3000;
-
+let code = 1000;
 // Get current directory name
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -264,7 +266,7 @@ mongoose
 
 // Define User Schema and Model
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true },
+  username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   email: { type: String, unique: true, required: true },
   privatekey: { type: String, unique: true, required: true },
@@ -285,7 +287,11 @@ app.get("/signup", (req, res) => {
 
 // Render the forgot password page
 app.get("/forgot_password", (req, res) => {
-  res.render("forgot_password", { response: "" });
+  res.render("forgot_password");
+});
+
+app.get("/upload_file", (req, res) => {
+  res.render("upload", { response: "" });
 });
 
 // Helper function to handle login (Admin or Regular User)
@@ -318,7 +324,7 @@ app.post("/login", async (req, res) => {
 
   try {
     // Fetch user from the database
-    const user = await User.findOne({ email: Username });
+    const user = await User.findOne({ username: Username });
 
     if (!user) {
       return res.render("login", { response: "User does not exist." });
@@ -360,10 +366,80 @@ app.post("/signup", async (req, res) => {
     // Create and save a new user
     const newUser = new User({ username: username, password: hashedPassword, email: email, privatekey: prikey, publickey: pubkey });
     await newUser.save();
-    res.redirect("/"); // Redirect to login after successful signup
+    res.redirect("/upload_file"); // Redirect to login after successful signup
   } catch (err) {
     console.error("Error during signup:", err.message);
     res.render("signup", { response: "Signup failed. Try again." });
+  }
+});
+
+app.post("/reset_password",async (req,res)=>{
+  const r_email = req.body.email;
+  try{
+        const resobj = await User.findOne({email: r_email});
+        const result=resobj.email;
+        console.log(result);
+    if(result.length > 0){
+    code = Math.floor(Math.random()*10000);
+    let transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'thedominators4444@gmail.com',
+            pass: 'mlja cufb bgtt zkiq'
+        }
+    });
+    let mailOptions = {
+        from: '"The DOMinators" <thedominators4444@gmail.com>',
+        to: r_email,
+        subject: "Reset Password",
+        html: `<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+        </head>
+        <body>
+            <div style="display: flex; justify-content: center;">
+                <img src="https://election.iitdh.ac.in/static/media/logog.084b1a7a95f4bcd9fccd.png" width="150px" alt="Logo">
+                <h4 style="color: #89288f; font-size: xx-large;">Reset Password</h4>
+            </div>
+            <div style="text-align: center;">
+                <p style="font-size: x-large;">Secret Code</p>
+                <p style="font-size: x-large;">${code}</p>
+            </div>
+        </body>
+        </html>`,
+    };
+    transporter.sendMail(mailOptions,(error, info)=>{
+        if(error){
+            return console.log(error);
+        }
+        res.render(__dirname+"/views/code.ejs");
+    });}
+    else{
+        res.render(__dirname+"/views/forgot_password.ejs",{
+            response: "User does not exist.",
+        });
+    }
+  }
+  catch(err){
+    console.error("Error finding user:", err.message);
+    res.status(500).send("Server error. Try again later.");
+  }
+});
+
+app.post("/code",(req,res)=>{
+  const in_code=req.body.code;
+  if(in_code==code && in_code>=0){
+      res.sendFile(__dirname+"/views/reset.html");
+  }
+  else{
+      res.render(__dirname+"/views/code.ejs",{
+          response: "Incorrect Code",
+      });
   }
 });
 
