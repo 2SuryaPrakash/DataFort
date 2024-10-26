@@ -65,7 +65,7 @@
       font-weight: bold;
     }
 
-    .popup, .result-popup {
+    .result-popup {
       display: none;
       position: fixed;
       top: 0;
@@ -77,42 +77,12 @@
       align-items: center;
     }
 
-    .popup-content {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-      width: 300px;
-    }
-
-    .popup-content input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    .popup-content button {
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .popup-content button:hover {
-      background-color: #45a049;
-    }
-
     .result-popup-content {
       background-color: #fff;
       padding: 20px;
       border-radius: 8px;
       text-align: center;
-      width: 300px;
+      width: auto;
     }
 
     .result-popup-content p {
@@ -139,103 +109,55 @@
 
   <div class="profile-container">
     <h2>User Profile</h2>
-    <p><strong>Username:</strong><%= name %></p>
-    <p><strong>Email:</strong><%= email %></p>
+    <p><strong>Username:</strong> <%= name %></p>
+    <p><strong>Email:</strong> <%= email %></p>
 
     <div class="wallets">
-      <% if(locals.wallet){ %>
       <h3>Your Wallets:</h3>
 
       <!-- Wallet list -->
-       <% for(var i=0;i<wallet;i++){ %>
-      <div class="wallet" onclick="openPopup('wallet1')">
-        <span class="wallet-name">Wallet <%= i+1 %></span>
+      <% for (var i = 0; i < wallet; i++) { %>
+      <div class="wallet" onclick="fetchPrivateKey('<%= i + 1 %>')">
+        <span class="wallet-name">Wallet <%= i + 1 %></span>
         <span>Public Key: <%= pubkey[i] %></span>
       </div>
-      <% }} %>
-      <div class="wallet" onclick="openPopup('wallet2')">
-        <span class="wallet-name">Wallet 2</span>
-        <span>Public Key: DEF456LMN</span>
-      </div>
-
-      <div class="wallet" onclick="openPopup('wallet3')">
-        <span class="wallet-name">Wallet 3</span>
-        <span>Public Key: GHI789OPQ</span>
-      </div>
+      <% } %>
     </div>
   </div>
 
-  <!-- Password prompt popup -->
-  <div class="popup" id="popup">
-    <div class="popup-content">
-      <h3>Enter Password</h3>
-      <input type="password" id="passwordInput" placeholder="Password">
-      <button onclick="authenticate()">Submit</button>
-    </div>
-  </div>
-
-  <!-- Result popup for displaying private key or error -->
+  <!-- Result popup for displaying private key -->
   <div class="result-popup" id="resultPopup">
-    <div class="result-popup-content" id="resultPopupContent">
+    <div class="result-popup-content">
       <p id="resultMessage"></p>
       <button class="close-button" onclick="closeResultPopup()">Close</button>
     </div>
   </div>
 
   <script>
-    let currentWallet = null;
+    // Function to fetch and display private key
+    async function fetchPrivateKey(walletId) {
+      try {
+        const response = await fetch(`/get-private-key/${walletId}`);
+        const data = await response.json();
 
-    // Function to open the password input popup
-    function openPopup(walletId) {
-      currentWallet = walletId;
-      document.getElementById('popup').style.display = 'flex';
-    }
+        if (data.success) {
+          document.getElementById('resultMessage').innerText = `Private Key: ${data.privateKey}`;
+        } else {
+          document.getElementById('resultMessage').innerText = data.message;
+        }
 
-    // Function to authenticate and show the private key or error message
-    function authenticate() {
-      const password = document.getElementById('passwordInput').value;
-
-      // Example password validation (replace with real authentication)
-      const validPassword = "1234";  // Replace with real password logic
-
-      // Define private keys for each wallet
-      const privateKeys = {
-        wallet1: 'PrivateKeyForWallet1: 123ABC',
-        wallet2: 'PrivateKeyForWallet2: 456DEF',
-        wallet3: 'PrivateKeyForWallet3: 789GHI'
-      };
-
-      if (password === validPassword) {
-        // Display private key if password is correct
-        document.getElementById('resultMessage').innerText = `Private Key: ${privateKeys[currentWallet]}`;
-        closePopup();
         document.getElementById('resultPopup').style.display = 'flex';
-      } else {
-        // Display error message if password is incorrect
-        document.getElementById('resultMessage').innerText = 'Incorrect password. Please try again.';
-        closePopup();
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('resultMessage').innerText = 'An error occurred. Please try again.';
         document.getElementById('resultPopup').style.display = 'flex';
       }
-    }
-
-    // Function to close the password input popup
-    function closePopup() {
-      document.getElementById('popup').style.display = 'none';
-      document.getElementById('passwordInput').value = ''; // Clear the input field
     }
 
     // Function to close the result popup
     function closeResultPopup() {
       document.getElementById('resultPopup').style.display = 'none';
     }
-
-    // Close the password popup when clicking outside it
-    window.onclick = function(event) {
-      const popup = document.getElementById('popup');
-      if (event.target === popup) {
-        closePopup();
-      }
-    };
   </script>
 </body>
 </html>

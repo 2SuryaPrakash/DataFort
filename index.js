@@ -500,6 +500,28 @@ app.get("/wallet",async (req,res)=>{
   }
 });
 
+app.get("/profile",async (req,res)=>{
+  const wallets1=await User.findOne({username: use_name}); 
+  res.render("profile",{
+    name: use_name,
+    email: user_email,
+    wallet: wallets1.publickey.length,
+    pubkey: wallets1.publickey,
+  });
+})
+
+app.get('/get-private-key/:walletId', async (req, res) => {
+  const walletId = parseInt(req.params.walletId);
+  const user = await User.findOne({ username: use_name });
+
+  if (user && user.privatekey[walletId - 1]) {
+    res.json({ success: true, privateKey: user.privatekey[walletId - 1] });
+  } else {
+    res.json({ success: false, message: 'Wallet not found' });
+  }
+});
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
