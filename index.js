@@ -277,7 +277,15 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 // Route for the homepage (login page)
-app.get("/", (req, res) => {
+/*app.get("/", (req, res) => {
+  res.render("login", { response: "" });
+});*/
+
+app.get('/', (req, res) => {
+  res.render('landing_page'); // Render the homepage EJS file
+});
+
+app.get("/login", (req, res) => {
   res.render("login", { response: "" });
 });
 
