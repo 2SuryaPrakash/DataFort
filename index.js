@@ -242,6 +242,7 @@ import { dirname } from "path";
 import nodemailer from "nodemailer";
 import Web3 from 'web3';
 import cron from "cron";
+import { create } from "ipfs-http-client";
 
 // Initialize express app
 const app = express();
@@ -251,6 +252,7 @@ let user_email="";
 let pubkey_arr=[];
 let prikey_arr=[];
 let use_name="";
+let user_pass="";
 // Get current directory name
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const web3=new Web3();
@@ -284,6 +286,31 @@ const User = mongoose.model("User", userSchema);
 /*app.get("/", (req, res) => {
   res.render("login", { response: "" });
 });*/
+
+async function ipfsClient() {
+  const ipfs = await create(
+    {
+      host:"http://10.240.255.119",
+      port:5001,
+      protocol:"https"
+    }
+  );
+  return ipfs;
+}
+async function uploadToIpfs() {
+  let ipfs = await ipfsClient();
+  let result = await ipfs.add("Hello");
+  return result;
+}
+
+async function getFile(cid) {
+  let ipfs = ipfsClient();
+  let asyncitr = ipfs.cat(cid);
+  for await (const itr of asyncitr){
+    let data=Buffer.from(itr).toString();
+    console.log(data);
+  }
+}
 
 app.get('/', (req, res) => {
   res.render('landing_page'); // Render the homepage EJS file
@@ -319,6 +346,7 @@ const handleLogin = (user, password, res, isAdmin) => {
     }
 
     if (result) {
+      user_pass=password;
       res.redirect(`${page}`);
     } else {
       res.render("login", { response: "Invalid Credentials. Try Again." });
