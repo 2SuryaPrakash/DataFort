@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>File Upload UI with Popups</title>
     <style>
         * {
@@ -20,7 +20,6 @@
             flex-direction: column;
         }
 
-        /* Header Styling */
         header {
             width: 100%;
             background-color: #343a40;
@@ -32,24 +31,6 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        header .nav {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        header a {
-            text-decoration: none;
-            color: white;
-            font-weight: 500;
-        }
-
-        header a:hover {
-            color: #ffc107;
-        }
-
-        /* Page Content Layout */
         .content {
             display: flex;
             flex-direction: column;
@@ -71,7 +52,6 @@
             margin-top: 40px;
         }
 
-        /* Upload Box Styles */
         .upload-box {
             width: 100%;
             padding: 20px;
@@ -86,13 +66,6 @@
         .upload-box:hover {
             border-color: #007bff;
             color: #007bff;
-        }
-
-        .upload-box svg {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 10px;
-            fill: #007bff;
         }
 
         .browse-button {
@@ -113,17 +86,15 @@
         .file-item {
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
             margin-bottom: 10px;
             font-size: 14px;
         }
 
-        .file-item img {
-            width: 20px;
-            margin-right: 10px;
-        }
-
         .file-item p {
-            flex-grow: 1;
             margin: 0;
             color: #333;
             word-break: break-word;
@@ -144,7 +115,6 @@
             cursor: pointer;
         }
 
-        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -157,14 +127,11 @@
             align-items: center;
             z-index: 1000;
         }
-        .logo img {
-            margin-right: 10px;
-            height: 50px;
-        }
+
         .modal-content {
             background-color: white;
             padding: 20px;
-            width: 300px;
+            width: auto;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
@@ -187,6 +154,12 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -196,7 +169,7 @@
         <div class="d-flex flex-row justify-content-between align-items-center gap-3">
             <div>
                 <a href="/" class="logo">
-                    <img src="https://i.ibb.co/8m2PTDw/DF-logo.jpg" alt="DF-logo" border="0" />
+                    <img src="https://i.ibb.co/8m2PTDw/DF-logo.jpg" alt="DF-logo" height="50" />
                 </a>
             </div>
             <div>
@@ -209,9 +182,6 @@
 <div class="content">
     <div class="upload-container">
         <div class="upload-box" id="uploadBox">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
             <p>Drag and Drop files to upload<br>or</p>
             <label class="browse-button">
                 Browse
@@ -232,9 +202,19 @@
         <p id="modalFileName"></p>
         <label for="fileDescription">Description:</label>
         <textarea id="fileDescription" rows="3"></textarea>
+        <span class="error" id="descriptionError">Description is required.</span>
         <label for="fileCategory">Category:</label>
         <input type="text" id="fileCategory">
+        <span class="error" id="categoryError">Category is required.</span>
         <button id="nextButton">Next</button>
+    </div>
+</div>
+
+<!-- Final Submit Modal -->
+<div class="modal" id="finalModal">
+    <div class="modal-content">
+        <h3>Submit All Files</h3>
+        <button id="finalSubmitButton">Submit All</button>
     </div>
 </div>
 
@@ -244,9 +224,14 @@
     const fileList = document.getElementById('fileList');
     const submitButton = document.getElementById('submitButton');
     const modal = document.getElementById('modal');
+    const finalModal = document.getElementById('finalModal');
     const modalFileName = document.getElementById('modalFileName');
     const nextButton = document.getElementById('nextButton');
+    const finalSubmitButton = document.getElementById('finalSubmitButton');
+    const descriptionError = document.getElementById('descriptionError');
+    const categoryError = document.getElementById('categoryError');
     let filesArray = [];
+    let currentFileIndex = 0;
 
     fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
     uploadBox.addEventListener('dragover', (e) => e.preventDefault());
@@ -258,23 +243,88 @@
     function handleFiles(files) {
         Array.from(files).forEach(file => {
             filesArray.push(file);
+
+            const fileName = file.name;
+            const fileType = file.type || 'Unknown type';
+            const fileSize = (file.size / 1024).toFixed(2);
+            const lastModified = new Date(file.lastModified).toLocaleDateString();
+
             const fileItem = document.createElement('div');
             fileItem.classList.add('file-item');
-            fileItem.innerHTML = `<img src="file-icon.png" alt="icon"><p>${file.name}</p><span class="delete-icon">✖</span>`;
+            fileItem.innerHTML = `
+                <p>${fileName} - ${fileType} - ${fileSize} KB - Last Modified: ${lastModified}</p>
+                <span class="delete-icon">✖</span>
+            `;
+
+            fileItem.querySelector('.delete-icon').addEventListener('click', () => {
+                filesArray = filesArray.filter(f => f !== file);
+                fileList.removeChild(fileItem);
+                if (filesArray.length === 0) {
+                    submitButton.style.display = 'none';
+                }
+            });
+
             fileList.appendChild(fileItem);
             submitButton.style.display = 'block';
         });
     }
 
-    submitButton.addEventListener('click', () => showModalForFile(filesArray[0]));
+    submitButton.addEventListener('click', () => {
+        if (filesArray.length > 0) {
+            currentFileIndex = 0;
+            showModalForFile(filesArray[currentFileIndex]);
+        }
+    });
 
     function showModalForFile(file) {
         modalFileName.textContent = file.name;
+        document.getElementById('fileDescription').value = '';
+        document.getElementById('fileCategory').value = '';
+        descriptionError.style.display = 'none';
+        categoryError.style.display = 'none';
         modal.style.display = 'flex';
     }
 
-    nextButton.addEventListener('click', () => modal.style.display = 'none');
+    nextButton.addEventListener('click', () => {
+        const description = document.getElementById('fileDescription').value.trim();
+        const category = document.getElementById('fileCategory').value.trim();
+
+        if (!description) {
+            descriptionError.style.display = 'block';
+        } else {
+            descriptionError.style.display = 'none';
+        }
+
+        if (!category) {
+            categoryError.style.display = 'block';
+        } else {
+            categoryError.style.display = 'none';
+        }
+
+        if (description && category) {
+            console.log('Description:', description);
+            console.log('Category:', category);
+            modal.style.display = 'none';
+
+            currentFileIndex++;
+            if (currentFileIndex < filesArray.length) {
+                showModalForFile(filesArray[currentFileIndex]);
+            } else {
+                finalModal.style.display = 'flex';
+            }
+        }
+    });
+
+    finalSubmitButton.addEventListener('click', () => {
+        console.log('Submitting all files with their details...');
+        console.log(filesArray);
+        // Implement the actual submission logic here (e.g., send files to server)
+        finalModal.style.display = 'none';
+        filesArray = [];
+        fileList.innerHTML = '';
+        submitButton.style.display = 'none';
+    });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
