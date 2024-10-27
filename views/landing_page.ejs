@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DataFort Inc.</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="https://i.ibb.co/8m2PTDw/DF-logo.jpg" type="image/x-icon"/>
+    <link rel="icon" href="https://i.ibb.co/8m2PTDw/DF-logo.jpg" type="image/x-icon" />
     <style>
         body {
             margin: 0;
             background: linear-gradient(280deg, #c217aa, #30128c);
             color: white;
             font-family: 'Arial', sans-serif;
-            overflow-x: hidden; 
+            overflow-x: hidden;
             height: 100%;
-            position: relative; 
+            position: relative;
         }
 
         .header {
@@ -25,80 +26,97 @@
             top: 0;
             left: 0;
             right: 0;
-            padding: 20px; 
-            backdrop-filter: blur(10px); 
-            transition: background-color 0.5s ease; 
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: background-color 0.5s ease;
             z-index: 1000;
         }
 
         .header.scrolled {
-            background-color: rgba(0, 0, 0, 0.8); 
+            background-color: rgba(0, 0, 0, 0.8);
         }
 
         .title {
-            margin: 0; 
+            margin: 0;
             color: #ff9800 !important;
-            font-size: 48px; 
+            font-size: 48px;
             text-shadow: 0px 0px 4px rgba(255, 152, 0, 0.6);
             white-space: nowrap;
-            overflow: hidden; 
-            border-right: .15em solid orange; 
-            animation: typing-title1 1s steps(12), blink-caret 0.75s step-end infinite; /* Animation */
+            overflow: hidden;
+            border-right: .15em solid orange;
+            animation: typing-title1 1s steps(12), blink-caret 0.75s step-end infinite;
         }
 
         @keyframes typing-title1 {
-            from { width: 0; }
-            to { width: 12ch; } /* Adjust to the number of characters in "DataFort Inc." */
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 12ch;
+            }
         }
 
         .solution-title {
             margin-bottom: 20px;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            white-space: nowrap; /* Prevent line breaks */
-            overflow: hidden; /* Hides the overflow */
-            border-right: .15em solid orange; /* Cursor effect */
-            animation: typing-title2 1.5s steps(32), blink-caret 0.75s step-end infinite; /* Animation */
-            animation-fill-mode: forwards; /* Keep the last frame of the animation */
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: .15em solid orange;
+            animation: typing-title2 1.5s steps(32), blink-caret 0.75s step-end infinite;
+            animation-fill-mode: forwards;
         }
 
         @keyframes typing-title2 {
-            from { width: 0; }
-            to { width: 24ch; } /* Adjust to the number of characters in "Our Innovative Solution" */
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 24ch;
+            }
         }
 
         @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: orange; }
+
+            from,
+            to {
+                border-color: transparent;
+            }
+
+            50% {
+                border-color: orange;
+            }
         }
 
         .container {
-            margin-top: 120px; /* Increased space below the fixed header */
+            margin-top: 120px;
         }
 
         .content {
-            margin-bottom: 40px; /* Space between rows */
+            margin-bottom: 40px;
             display: flex;
             align-items: center;
-            justify-content: center; /* Center content horizontally */
+            justify-content: center;
         }
 
         .solutionIdeas {
-            font-size: 20px; /* Adjusted font size for readability */
+            font-size: 20px;
             font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-            color: white; /* Change text color for contrast */
+            color: white;
             margin-bottom: 20px;
-            text-align: justify; /* Justified text for better alignment */
+            text-align: justify;
         }
 
         .web3-title {
             font-weight: bold;
-            color: black; /* Changed to black */
+            color: black;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
-            margin-top: 40px; /* Space above the title */
-            text-align: center; /* Center alignment */
-            animation: bounce-in 1s ease forwards; /* Bounce animation */
+            margin-top: 40px;
+            text-align: center;
+            animation: bounce-in 1s ease forwards;
         }
 
         @keyframes bounce-in {
@@ -106,29 +124,31 @@
                 transform: scale(0);
                 opacity: 0;
             }
+
             60% {
                 transform: scale(1.2);
                 opacity: 1;
             }
+
             100% {
                 transform: scale(1);
             }
         }
 
         .btn {
-            margin-left: 20px; 
+            margin-left: 20px;
             background: linear-gradient(280deg, #ff9800, #ff5722);
             color: white;
-            border-radius: 20px; 
+            border-radius: 20px;
             padding: 10px 30px;
-            font-size: 20px; 
+            font-size: 20px;
             border: none;
-            transition: background-color 0.3s ease-in, transform 0.3s ease-in; 
+            transition: background-color 0.3s ease-in, transform 0.3s ease-in;
         }
 
         .btn:hover {
             background: linear-gradient(280deg, #e68900, #e64a19);
-            transform: scale(1.05); 
+            transform: scale(1.05);
         }
 
         .image {
@@ -136,16 +156,18 @@
             height: auto;
             border-radius: 10px;
             display: block;
-            margin: 20px auto; /* Center image and add vertical margin */
+            margin: 20px auto;
             opacity: 0;
-            transform: translateY(20px); /* Start slightly below */
+            transform: translateY(20px);
             animation: fade-in-slide-up 1s ease forwards;
         }
+
         @keyframes fade-in-slide-up {
             0% {
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0);
@@ -153,6 +175,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header" id="header">
         <p class="title">DataFort Inc.</p>
@@ -165,29 +188,48 @@
         <!-- First Row -->
         <div class="row content">
             <div class="col-md-6">
-                <p class="solution-title" style="font-family: monospace;font-size: 40px;color:black">Our Innovative Solution</p>
-                <p class="solutionIdeas">We propose creating a secure private blockchain system that enables organizations to effectively track and manage employee activities. This solution guarantees the integrity of sensitive information through a tamper-proof ledger, protecting both general data and confidential records like personal and financial information.</p>
-                <p class="solutionIdeas">By employing advanced encryption methods and role-based access control, we ensure that only authorized personnel can access critical data. Additionally, real-time monitoring and automated processes via smart contracts streamline HR functions, alerting users of compliance issues while offering integration with existing systems for enhanced analytics and insights.</p>
+                <p class="solution-title" style="font-family: monospace;font-size: 40px;color:black">Our Innovative
+                    Solution</p>
+                <p class="solutionIdeas">We propose creating a secure private blockchain system that enables
+                    organizations to effectively track and manage employee activities. This solution guarantees the
+                    integrity of sensitive information through a tamper-proof ledger, protecting both general data and
+                    confidential records like personal and financial information.</p>
+                <p class="solutionIdeas">By employing advanced encryption methods and role-based access control, we
+                    ensure that only authorized personnel can access critical data. Additionally, real-time monitoring
+                    and automated processes via smart contracts streamline HR functions, alerting users of compliance
+                    issues while offering integration with existing systems for enhanced analytics and insights.</p>
             </div>
             <div class="col-md-6">
-                <img class="image" src="https://i.ibb.co/8d0hVPf/IPFS.jpg" style="margin-top: 50px;" alt="IPFS" border="0" />
+                <img class="image" src="https://i.ibb.co/8d0hVPf/IPFS.jpg" style="margin-top: 50px;" alt="IPFS"
+                    border="0" />
             </div>
         </div>
         <!-- Second Row -->
         <div class="row content">
             <div class="col-md-6">
-                <img class="image" src="https://i.ibb.co/1q2KWWB/web3-Image.jpg" alt="web3-Image" style="margin-top: 110px;" border="0" />     
+                <img class="image" src="https://i.ibb.co/1q2KWWB/web3-Image.jpg" alt="web3-Image"
+                    style="margin-top: 110px;" border="0" />
             </div>
             <div class="col-md-6 text-center">
-                <h2 class="web3-title" style="font-family: monospace;font-size: 40px;color:black;">The Promise of Web3</h2>
-                <p class="solutionIdeas" style="text-align: center;">Web3 represents the next generation of the internet, built on decentralized networks that empower users with control over their own data. Unlike the traditional web, where users are often subject to the whims of large corporations, Web3 aims to return ownership and sovereignty to individuals. This shift enables more equitable participation in online communities and creates new economic opportunities for everyone involved.</p>
-                <p class="solutionIdeas" style="text-align: center;">The technology behind Web3, including blockchain and smart contracts, facilitates trustless interactions between parties without the need for intermediaries. By leveraging these advancements, organizations can develop innovative solutions that enhance transparency and security. As more people engage with decentralized applications, the potential for transformative change in various industries becomes increasingly evident.</p>
+                <h2 class="web3-title" style="font-family: monospace;font-size: 40px;color:black;">The Promise of Web3
+                </h2>
+                <p class="solutionIdeas" style="text-align: center;">Web3 represents the next generation of the
+                    internet, built on decentralized networks that empower users with control over their own data.
+                    Unlike the traditional web, where users are often subject to the whims of large corporations, Web3
+                    aims to return ownership and sovereignty to individuals. This shift enables more equitable
+                    participation in online communities and creates new economic opportunities for everyone involved.
+                </p>
+                <p class="solutionIdeas" style="text-align: center;">The technology behind Web3, including blockchain
+                    and smart contracts, facilitates trustless interactions between parties without the need for
+                    intermediaries. By leveraging these advancements, organizations can develop innovative solutions
+                    that enhance transparency and security. As more people engage with decentralized applications, the
+                    potential for transformative change in various industries becomes increasingly evident.</p>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const header = document.getElementById('header');
             if (window.scrollY > 0) {
                 header.classList.add('scrolled');
@@ -197,15 +239,16 @@
         });
         const Title = document.querySelector('.title');
         setTimeout(() => {
-            Title.style.borderRight = 'none'; // Remove caret
-            Title.style.animation = 'none'; // Stop blinking animation
+            Title.style.borderRight = 'none';
+            Title.style.animation = 'none';
         }, 1010);
         // Hide caret after animation
         const solutionTitle = document.querySelector('.solution-title');
         setTimeout(() => {
-            solutionTitle.style.borderRight = 'none'; // Remove caret
-            solutionTitle.style.animation = 'none'; // Stop blinking animation
-        }, 1500); // Match the duration of the animation (5.5s)
+            solutionTitle.style.borderRight = 'none';
+            solutionTitle.style.animation = 'none';
+        }, 1500); 
     </script>
 </body>
+
 </html>

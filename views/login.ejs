@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="styles.css" rel="stylesheet">
-    <link rel="icon" href="https://i.ibb.co/8m2PTDw/DF-logo.jpg" type="image/x-icon"/>
+    <link rel="icon" href="https://i.ibb.co/8m2PTDw/DF-logo.jpg" type="image/x-icon" />
     <style>
         body {
             background: linear-gradient(280deg, #c217aa, #30128c);
@@ -29,19 +31,26 @@
             top: 0;
             left: 0;
             right: 0;
-            padding: 20px; 
-            backdrop-filter: blur(10px); 
-            transition: background-color 0.5s ease; 
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: background-color 0.5s ease;
             z-index: 1000;
         }
+
         .header.scrolled {
-            background-color: rgba(0, 0, 0, 0.8); 
+            background-color: rgba(0, 0, 0, 0.8);
         }
 
         @keyframes typing-title1 {
-            from { width: 0; }
-            to { width: 12ch; } /* Adjust to the number of characters in "DataFort Inc." */
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 12ch;
+            }
         }
+
         .container {
             background: white;
             padding: 2rem;
@@ -90,34 +99,42 @@
         #response {
             color: red;
         }
-        .submitBtn,.signupBtn {
+
+        .submitBtn,
+        .signupBtn {
             width: 100%;
             margin-top: 20px;
-            font-family:Georgia, 'Times New Roman', Times, serif;
+            font-family: Georgia, 'Times New Roman', Times, serif;
             border-radius: 20px;
             color: white;
             text-align: center;
             font-size: 16px;
             padding: 10px;
         }
-        .submitBtn{
+
+        .submitBtn {
             background-color: #89278d;
         }
-        .signupBtn{
+
+        .signupBtn {
             background-color: #30128c;
         }
-        .forgotBtn{
+
+        .forgotBtn {
             color: grey;
         }
+
         .submitBtn:hover {
             background-color: #661869;
             color: white;
         }
-        .signupBtn:hover{
+
+        .signupBtn:hover {
             background-color: #261067;
             color: white;
         }
-        .forgotBtn:hover{
+
+        .forgotBtn:hover {
             text-decoration: underline;
         }
 
@@ -135,20 +152,24 @@
             0% {
                 transform: scale(0.8);
             }
+
             50% {
                 transform: scale(1.2);
             }
+
             100% {
                 transform: scale(0.8);
             }
         }
     </style>
 </head>
+
 <body>
     <div class="header" id="header">
         <div>
             <a href="/" class="logo" style="margin-left: 20px;">
-                <img src="https://i.ibb.co/8m2PTDw/DF-logo.jpg" alt="DF-logo" height="50" style="border-radius: 25px;"/>
+                <img src="https://i.ibb.co/8m2PTDw/DF-logo.jpg" alt="DF-logo" height="50"
+                    style="border-radius: 25px;" />
             </a>
         </div>
     </div>
@@ -157,31 +178,37 @@
         <h2 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Welcome</h2>
         <form action="/login" method="post">
             <input class="mb-2" placeholder="Username" type="text" name="Username" autofocus required>
-            <input class="mb-2" placeholder="Password" type="password" name="Password" id="password_inp" autocomplete="off" required>
-            <button class="btn btn-light btn-outline-dark" id="toggle_type" type="button" style="font-family:Arial, Helvetica, sans-serif;">Show Password</button>
+            <input class="mb-2" placeholder="Password" type="password" name="Password" id="password_inp"
+                autocomplete="off" required>
+            <button class="btn btn-light btn-outline-dark" id="toggle_type" type="button"
+                style="font-family:Arial, Helvetica, sans-serif;">Show Password</button>
             <button class="btn submitBtn" type="submit">Login</button>
         </form>
-   <h5 id="response" style="margin-top: 10px; margin-bottom: 10px;"><%= response %></h5>
-          <a href="/forgot_password" class=""><button class="btn forgotBtn" style="margin-top: -1px; margin-bottom: -12px;">Forgot password?</button></a>
-        <a href="/signup" class="btn signupBtn">Sign-Up</a> 
+        <h5 id="response" style="margin-top: 10px; margin-bottom: 10px;">
+            <%= response %>
+        </h5>
+        <a href="/forgot_password" class=""><button class="btn forgotBtn"
+                style="margin-top: -1px; margin-bottom: -12px;">Forgot password?</button></a>
+        <a href="/signup" class="btn signupBtn">Sign-Up</a>
     </div>
     <div class="pulse"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
     <script>
-        const pass_button=document.getElementById("toggle_type");
-        const pass_inp=document.getElementById("password_inp");
-        pass_button.addEventListener('click',function(){
-            if(pass_inp.getAttribute("type")=="password")
-            {
-                pass_inp.setAttribute("type","text");
-                pass_button.innerHTML="Hide Password";
+        const pass_button = document.getElementById("toggle_type");
+        const pass_inp = document.getElementById("password_inp");
+        pass_button.addEventListener('click', function () {
+            if (pass_inp.getAttribute("type") == "password") {
+                pass_inp.setAttribute("type", "text");
+                pass_button.innerHTML = "Hide Password";
             }
-            else if(pass_inp.getAttribute("type")=="text")
-            {
-                pass_inp.setAttribute("type","password");
-                pass_button.innerHTML="Show Password";
+            else if (pass_inp.getAttribute("type") == "text") {
+                pass_inp.setAttribute("type", "password");
+                pass_button.innerHTML = "Show Password";
             }
         });
     </script>
 </body>
+
 </html>
