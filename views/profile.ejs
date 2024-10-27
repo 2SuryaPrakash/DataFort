@@ -13,7 +13,7 @@
         }
 
         header {
-            background-color: #343a40;
+            background:linear-gradient(#661869,#30128c);
             color: white;
             padding: 15px 0;
             position: sticky;
@@ -24,17 +24,19 @@
 
         .title {
             margin: 0;
-            font-size: 48px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-left: 85px;
+            font-size: 38px;
+            color: #ff9800;
+            text-shadow: 0px 0px 4px rgba(255, 152, 0, 0.6);
             white-space: nowrap;
             overflow: hidden;
             border-right: .15em solid orange;
-            animation: typing-title1 4s steps(12), blink-caret 0.75s step-end infinite;
+            animation: typing-title1 1s steps(12), blink-caret 0.75s step-end infinite;
         }
 
         @keyframes typing-title1 {
             from { width: 0 }
-            to { width: 12ch }
+            to { width: 11ch }
         }
 
         @keyframes blink-caret {
@@ -77,7 +79,7 @@
             padding: 30px;
             text-align: center;
             margin-bottom: 20px;
-            color: #30128c;
+            color: black;
             font-size: 22px;
             background-color: #fff;
         }
@@ -89,26 +91,27 @@
             background-color: #f8f9fa;
             padding: 15px;
             margin: 10px 0;
-            border: 2px solid #007bff;
+            border: 2px solid black;
             position: relative;
             overflow: hidden;
         }
-
         .wallet:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            background-color: #e7f1ff;
+            background-color: #89278d;
         }
 
         .wallet-name {
             font-weight: bold;
-            color: #007bff;
+            color: black;
             font-size: 1.25rem;
+        }
+        .wallet-name:hover{
+            color:#ff9800;
         }
 
         .text-muted {
-            font-size: 0.9rem;
-            color: #6c757d;
+            font-size: 20px;
         }
 
         .modal-content {
@@ -160,24 +163,22 @@
 
 <body>
     <header>
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="container-fluid">
+            <div class="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <a href="/" class="logo">
-                        <img src="https://i.ibb.co/8m2PTDw/DF-logo.jpg" alt="DF-logo" height="50" />
+                    <a href="/" class="logo" style="margin-left: 20px;">
+                        <img src="https://i.ibb.co/8m2PTDw/DF-logo.jpg" alt="DF-logo" height="50" style="border-radius: 25px;"/>
                     </a>
                 </div>
                 <div class="teamName">
                     <p class="title">DataFort Inc.</p>
                 </div>
                 <div>
-                    <a href="/upload_file" class="nav-link">
-                      <div class="d-flex flex-column justify-content-center align-items-center pt-3 ">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-arrow-up-fill" viewBox="0 0 16 16">
+                    <a href="/upload_file" class="nav-link" style="margin-right: 20px;">
+                          <svg class="bi d-block mx-auto mb-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-arrow-up-fill" viewBox="0 0 16 16">
                           <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M6.354 9.854a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 8.707V12.5a.5.5 0 0 1-1 0V8.707z"/>
                         </svg>
-                        <p>Upload Files</p>
-                      </div>
+                        Upload Files
                     </a>
                 </div>
             </div>
@@ -190,12 +191,12 @@
             <p class="card-text"><strong>Username:</strong> <%= name %></p>
             <p class="card-text"><strong>Email:</strong> <%= email %></p>
             <div class="wallets mt-4">
-                <h3>Your Wallets:</h3>
+                <h3 style="margin-bottom: 20px;">Your Wallets:</h3>
                 <% for (var i = 0; i < wallet; i++) { %>
                     <div class="wallet" onclick="fetchPrivateKey('<%= i + 1 %>')">
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between wallet-box">
                             <span class="wallet-name">Wallet <%= i + 1 %></span>
-                            <span class="text-muted">Public Key: <%= pubkey[i] %></span>
+                            <span class="text-muted" >Public Key: <%= pubkey[i] %></span>
                         </div>
                     </div>
                 <% } %>
@@ -304,6 +305,11 @@
                 verifyPassword();
             }
         });
+        const Title = document.querySelector('.title');
+        setTimeout(() => {
+            Title.style.borderRight = 'none'; // Remove caret
+            Title.style.animation = 'none'; // Stop blinking animation
+        }, 1010);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

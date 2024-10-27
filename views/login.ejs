@@ -41,7 +41,7 @@
             height: 50px;
         }
 
-        h3 {
+        h2 {
             margin-bottom: 1rem;
             color: #89288f;
             font-weight: bold;
@@ -71,6 +71,7 @@
         .submitBtn,.signupBtn ,.forgotBtn{
             width: 100%;
             margin-top: 20px;
+            font-family:Georgia, 'Times New Roman', Times, serif;
             border-radius: 20px;
             color: white;
             text-align: center;
@@ -125,14 +126,14 @@
 <body>
     <div class="container">
 
-        <h3>Welcome</h3>
+        <h2 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Welcome</h2>
         <form action="/login" method="post">
             <input class="mb-2" placeholder="Username" type="text" name="Username" autofocus required>
             <input class="mb-2" placeholder="Password" type="password" name="Password" id="password_inp" autocomplete="off" required>
-            <button class="btn btn-light btn-outline-dark" id="toggle_type" type="button">Show Password</button>
+            <button class="btn btn-light btn-outline-dark" id="toggle_type" type="button" style="font-family:Arial, Helvetica, sans-serif;">Show Password</button>
             <button class="btn submitBtn" type="submit">Login</button>
         </form>
-   <h5 id="response"><%= response %></h5>
+   <h5 id="response" style="margin-top: 10px; margin-bottom: 10px;"><%= response %></h5>
           <a href="/forgot_password" class=""><button class="btn forgotBtn" style="margin-top: -1px; margin-bottom: -12px;">Forgot password</button></a>
         <a href="/signup" class="btn signupBtn">Sign-Up</a> 
     </div>

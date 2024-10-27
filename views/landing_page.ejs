@@ -36,13 +36,13 @@
 
         .title {
             margin: 0; 
-            color: #ff9800;
+            color: #ff9800 !important;
             font-size: 48px; 
             text-shadow: 0px 0px 4px rgba(255, 152, 0, 0.6);
             white-space: nowrap;
             overflow: hidden; 
             border-right: .15em solid orange; 
-            animation: typing-title1 4s steps(12), blink-caret 0.75s step-end infinite; /* Animation */
+            animation: typing-title1 1s steps(12), blink-caret 0.75s step-end infinite; /* Animation */
         }
 
         @keyframes typing-title1 {
@@ -57,13 +57,13 @@
             white-space: nowrap; /* Prevent line breaks */
             overflow: hidden; /* Hides the overflow */
             border-right: .15em solid orange; /* Cursor effect */
-            animation: typing-title2 5.5s steps(32), blink-caret 0.75s step-end infinite; /* Animation */
+            animation: typing-title2 1.5s steps(32), blink-caret 0.75s step-end infinite; /* Animation */
             animation-fill-mode: forwards; /* Keep the last frame of the animation */
         }
 
         @keyframes typing-title2 {
             from { width: 0; }
-            to { width: 25ch; } /* Adjust to the number of characters in "Our Innovative Solution" */
+            to { width: 24ch; } /* Adjust to the number of characters in "Our Innovative Solution" */
         }
 
         @keyframes blink-caret {
@@ -194,13 +194,17 @@
                 header.classList.remove('scrolled');
             }
         });
-
+        const Title = document.querySelector('.title');
+        setTimeout(() => {
+            Title.style.borderRight = 'none'; // Remove caret
+            Title.style.animation = 'none'; // Stop blinking animation
+        }, 1010);
         // Hide caret after animation
         const solutionTitle = document.querySelector('.solution-title');
         setTimeout(() => {
             solutionTitle.style.borderRight = 'none'; // Remove caret
             solutionTitle.style.animation = 'none'; // Stop blinking animation
-        }, 5500); // Match the duration of the animation (5.5s)
+        }, 1500); // Match the duration of the animation (5.5s)
     </script>
 </body>
 </html>
