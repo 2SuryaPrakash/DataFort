@@ -1,13 +1,14 @@
 # This is the readme file for setting up the IPFS cluster.
+```
 Install node.js/npm
 Install kubo ipfs client at : https://dist.ipfs.tech/#kubo
-
+```
 ## For setting up the bootstrap node:
 
 
 Save the swarm.key file in %USERPROFILE%/.ipfs and use the same for all nodes.
 
-````
+```
 npm i
 ipfs init
 node file_server.js
@@ -29,7 +30,7 @@ Set access to all.
 
 Save the swarm.key file given by bootstrap node in %USERPROFILE%/.ipfs.
 
-````
+```
 npm i
 ipfs init
 API_SERVER_IP=the_wpa4_lan_ip API_SERVER_PEER_ID=corresponding_hash_obtained_from_ipfs_id node privatenode.js
