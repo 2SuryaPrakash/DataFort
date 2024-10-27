@@ -13,7 +13,7 @@
             font-family: 'Arial', sans-serif;
             overflow-x: hidden; 
             height: 100%;
-            position: relative; /* Positioning context for absolute elements */
+            position: relative; 
         }
 
         .header {
@@ -27,7 +27,7 @@
             padding: 20px; 
             backdrop-filter: blur(10px); 
             transition: background-color 0.5s ease; 
-            z-index: 1000; /* Ensure header is above other content */
+            z-index: 1000;
         }
 
         .header.scrolled {
@@ -36,11 +36,12 @@
 
         .title {
             margin: 0; 
+            color: #ff9800;
             font-size: 48px; 
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
-            white-space: nowrap; /* Prevent line breaks */
-            overflow: hidden; /* Hides the overflow */
-            border-right: .15em solid orange; /* Cursor effect */
+            text-shadow: 0px 0px 4px rgba(255, 152, 0, 0.6);
+            white-space: nowrap;
+            overflow: hidden; 
+            border-right: .15em solid orange; 
             animation: typing-title1 4s steps(12), blink-caret 0.75s step-end infinite; /* Animation */
         }
 
@@ -76,17 +77,23 @@
 
         .content {
             margin-bottom: 40px; /* Space between rows */
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center content horizontally */
         }
 
         .solutionIdeas {
             font-size: 20px; /* Adjusted font size for readability */
             font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
             color: white; /* Change text color for contrast */
+            margin-bottom: 20px;
+            text-align: justify; /* Justified text for better alignment */
         }
 
         .web3-title {
             font-weight: bold;
             color: black; /* Changed to black */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
             margin-top: 40px; /* Space above the title */
             text-align: center; /* Center alignment */
@@ -109,24 +116,39 @@
 
         .btn {
             margin-left: 20px; 
-            background-color: #ff6f61; 
+            background: linear-gradient(280deg, #ff9800, #ff5722);
             color: white;
             border-radius: 20px; 
             padding: 10px 30px;
             font-size: 20px; 
-            transition: background-color 0.3s ease, transform 0.3s ease; 
+            border: none;
+            transition: background-color 0.3s ease-in, transform 0.3s ease-in; 
         }
 
         .btn:hover {
-            background-color: #ff4f40; 
+            background: linear-gradient(280deg, #e68900, #e64a19);
             transform: scale(1.05); 
         }
 
-        /* Responsive images */
         .image {
-            max-width: 100%; /* Responsive images */
-            height: auto; /* Maintain aspect ratio */
-            border-radius: 10px; /* Rounded corners */
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            margin: 20px auto; /* Center image and add vertical margin */
+            opacity: 0;
+            transform: translateY(20px); /* Start slightly below */
+            animation: fade-in-slide-up 1s ease forwards;
+        }
+        @keyframes fade-in-slide-up {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -147,15 +169,15 @@
                 <p class="solutionIdeas">By employing advanced encryption methods and role-based access control, we ensure that only authorized personnel can access critical data. Additionally, real-time monitoring and automated processes via smart contracts streamline HR functions, alerting users of compliance issues while offering integration with existing systems for enhanced analytics and insights.</p>
             </div>
             <div class="col-md-6">
-                <img src="your-image-source.jpg" alt="Your Image" class="image"> <!-- Replace with your image source -->
+                <img class="image" src="https://i.ibb.co/8d0hVPf/IPFS.jpg" alt="IPFS" border="0" />
             </div>
         </div>
         <!-- Second Row -->
         <div class="row content">
             <div class="col-md-6">
-                <img src="your-second-image-source.jpg" alt="Your Second Image" class="image"> <!-- Replace with your second image source -->
+                <img class="image" src="https://i.ibb.co/1q2KWWB/web3-Image.jpg" alt="web3-Image" style="margin-top: 100px;" border="0" />     
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 text-center">
                 <h2 class="web3-title" style="font-family: monospace;font-size: 40px;color:black;">The Promise of Web3</h2>
                 <p class="solutionIdeas">Web3 represents the next generation of the internet, built on decentralized networks that empower users with control over their own data. Unlike the traditional web, where users are often subject to the whims of large corporations, Web3 aims to return ownership and sovereignty to individuals. This shift enables more equitable participation in online communities and creates new economic opportunities for everyone involved.</p>
                 <p class="solutionIdeas">The technology behind Web3, including blockchain and smart contracts, facilitates trustless interactions between parties without the need for intermediaries. By leveraging these advancements, organizations can develop innovative solutions that enhance transparency and security. As more people engage with decentralized applications, the potential for transformative change in various industries becomes increasingly evident.</p>
