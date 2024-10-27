@@ -64,26 +64,59 @@
                 border-color: orange;
             }
         }
+        
+        /* Full-page container to center everything */
+.uploaded-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-        .upload-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            background-color: #f8f9fa;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            padding: 30px;
-            padding-bottom: 0;
-            width: 80%;
-            margin-top: 40px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+/* Subtle hover effect */
+.uploaded-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.25);
+}
 
-        .upload-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.25);
-        }
+/* List container with no bullet points */
+.file-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%; /* Full width of parent container */
+    max-width: 600px; /* Optional: Limit max width */
+}
+
+/* Center each list item */
+.file-item {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+/* Styling for individual boxes */
+.linkbox {
+    width: 100%; /* Make linkbox fill the available width */
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 10px 15px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+/* Link styling */
+.file-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.file-link:hover {
+    color: #007bff;
+}
 
         .upload-box {
             width: 100%;
@@ -312,18 +345,27 @@
     </div>
     <div id="downloadLinksContainer"></div>
         <form action="\show_link" method="post">
-            <button id="Clicked" type="submit">Your Uploaded Files</button>
-            <div class="upload-container">
-            <ul>
+            <button id="Clicked" type="submit" style="margin-left: 680px;padding: 5px 15px 5px 15px;
+            border-radius: 7px;color: white;background-color: green;border-width: 0px;">Your Uploaded Files</button>
             <% if(locals.fileLinks){ %>
-            <% fileLinks.forEach(link => { %>
-                <li>
-                    <a href="<%= link.filePath %>" download>
-                        Download CID <%= link.cid %>
-                    </a>
-                </li>
-            <% })} %>
-            </ul></div>
+                <div class="uploaded-container">
+                    <ul class="file-list">
+                        <% fileLinks.forEach(link => { %>
+                            <li class="file-item">
+                                <div class="linkbox">
+                                    <a class="file-link" href="<%= link.filePath %>" download>
+                                        OPEN CID <%= link.cid %>
+                                    </a>
+                                </div>
+                            </li>
+                        <% }) %>
+                    </ul>
+                </div>                
+            <% }else if(locals.response){ %>
+                <div>
+                    <h5 style="color: red;"><%= response %></h5>
+                </div>
+            <% } %>
         </form>
         <ul id="downloadLinks"></ul>
     </div>

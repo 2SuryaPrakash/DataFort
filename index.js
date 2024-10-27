@@ -233,7 +233,7 @@ app.listen(port, () => {
 //   console.log(`Server is running on http://localhost:${port}`);
 // });
 
-import express from "express";
+import express, { response } from "express";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt"; // For password hashing and comparison
 import mongoose from "mongoose"; // MongoDB ODM
@@ -424,11 +424,11 @@ app.post("/show_link", async (req,res)=>{
       const fileUrl = `http://10.200.241.97:4000/api/file/${cid}`;
       fileLinks.push({ cid, filePath: fileUrl });
     }
-    res.render("upload",{name: use_name,cids: cids, walletno: walletId, fileLinks: fileLinks});
+    res.render("upload",{name: use_name,cids: cids, walletno: walletId, fileLinks: fileLinks, response: ""});
   }
   catch(err){
     console.error('Error fetching file links:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    res.render("upload",{name: use_name,cids: cids, walletno: walletId, fileLinks: fileLinks, response: "No files have been uploaded"});
   }
 });
 
