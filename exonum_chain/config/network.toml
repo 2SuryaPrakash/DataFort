@@ -1,0 +1,33 @@
+[
+network_config
+]
+listen_address = "0.0.0.0:6333"
+max_incoming_connections = 128
+max_outgoing_connections = 128
+tcp_nodelay = true
+
+[
+network_config.peers
+]
+bootstrap_nodes = ["BOOTSTRAP_NODE_IP:6333"]
+
+[
+genesis_config
+]
+consensus = "Private"
+validator_keys = [
+    "PUBLIC_KEY_NODE_1",
+    "PUBLIC_KEY_NODE_2",
+    "PUBLIC_KEY_NODE_3",
+    "PUBLIC_KEY_NODE_4"
+]
+
+[
+private_config
+]
+listen_address = "0.0.0.0:8091"
+
+[
+public_config
+]
+listen_address = "0.0.0.0:8200" 

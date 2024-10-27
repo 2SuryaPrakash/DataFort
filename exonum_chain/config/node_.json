@@ -1,0 +1,11 @@
+{
+    "node_id": "1",
+    "public_key": "MCowBQYDK2VwAyEAQxN1GZpYDmq/IYy3wkIoBWzATI8+bx7/zxYQLlK2Ktw=",
+    "private_key": "MC4CAQAwBQYDK2VwBCIEIN33aDJOZ4q9hb1g5XwiYKYHrScT2Yg0cypGiqrialJc",
+    "peer_address": "http://192.168.1.101:8080",
+    "known_peers": [
+        { "address": "192.168.1.102:3000" },
+        { "address": "192.168.1.103:3000" }
+    ]
+
+}
