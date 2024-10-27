@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download File from IPFS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input {
+            padding: 10px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Download File from IPFS</h1>
+    <input type="text" id="hashInput" placeholder="Enter IPFS Hash" />
+    <button id="downloadButton">Download File</button>
+
+    <script>
+        document.getElementById('downloadButton').addEventListener('click', async () => {
+            const hash = document.getElementById('hashInput').value; // Get hash from input
+
+            if (!hash) {
+                alert('Please enter a valid IPFS hash.');
+                return;
+            }
+
+            try {
+                // Make a GET request to the API to fetch the file
+                const response = await fetch(`http://10.200.241.97:4000/api/file/${hash}`);
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+
+                // Check the Content-Type header
+                const contentType = response.headers.get('Content-Type');
+                let fileExtension;
+
+                // Determine the file extension based on Content-Type
+                switch (contentType) {
+                    case 'application/pdf':
+                        fileExtension = 'pdf';
+                        break;
+                    case 'image/jpeg':
+                        fileExtension = 'jpg';
+                        break;
+                    case 'image/png':
+                        fileExtension = 'png';
+                        break;
+                    case 'text/plain':
+                        fileExtension = 'txt';
+                        break;
+                    case 'application/octet-stream':
+                        fileExtension = 'bin'; // Generic binary file
+                        break;
+                    // Add more content types as needed
+                    default:
+                        fileExtension = 'file'; // Fallback
+                }
+
+                // Create a Blob from the response data
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob); // Create a URL for the Blob
+
+                // Create an anchor element and programmatically click it to trigger download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${hash}.${fileExtension}`; // Suggest a filename with extension
+                document.body.appendChild(a);
+                a.click(); // Programmatically click the anchor
+                a.remove(); // Remove the anchor from the document
+
+                // Clean up the object URL
+                window.URL.revokeObjectURL(url);
+
+            } catch (error) {
+                console.error('Error downloading the file:', error);
+                alert('Failed to download the file. Please check the console for more details.');
+            }
+        });
+    </script>
+</body>
+</html>

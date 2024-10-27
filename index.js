@@ -549,6 +549,17 @@ app.post("/reset",async (req,res)=>{
     }
 });
 
+app.post("/add",async (req,res)=>{
+  const keys=createNewKey();
+  const prikey=keys.privateKey;
+  const pubkey=keys.address;
+  const user=await User.findOne({username: use_name});
+  user.privatekey.push(prikey);
+  user.publickey.push(pubkey);
+  await user.save();
+  res.redirect("/profile");
+});
+
 app.get("/wallet",async (req,res)=>{
   try{
       const wallet = await User.findOne({username: use_name});
