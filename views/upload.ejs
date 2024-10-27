@@ -310,7 +310,23 @@
             <button class="submit-button" style="margin-bottom: 20px;" id="submitButton">Submit</button>
         </div>
     </div>
-
+    <div id="downloadLinksContainer"></div>
+        <form action="\show_link" method="post">
+            <button id="Clicked" type="submit">Your Uploaded Files</button>
+            <div class="upload-container">
+            <ul>
+            <% if(locals.fileLinks){ %>
+            <% fileLinks.forEach(link => { %>
+                <li>
+                    <a href="<%= link.filePath %>" download>
+                        Download CID <%= link.cid %>
+                    </a>
+                </li>
+            <% })} %>
+            </ul></div>
+        </form>
+        <ul id="downloadLinks"></ul>
+    </div>
 
     <!-- Modal Popup -->
     <div class="modal" id="modal">
@@ -337,6 +353,8 @@
     </div>
     <div id="result"></div>
     <script>
+        let wall_cid=`<%= cids[walletno] %>`;
+
         const uploadBox = document.getElementById('uploadBox');
         const fileInput = document.getElementById('fileInput');
         const fileList = document.getElementById('fileList');
@@ -357,7 +375,7 @@
             e.preventDefault();
             handleFiles(e.dataTransfer.files);
         });
-
+        
         async function sendCIDToBackend(cid) {
         try{
             const response = await fetch('/api/upload-cid', {

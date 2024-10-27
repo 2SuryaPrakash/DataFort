@@ -253,7 +253,8 @@ let pubkey_arr=[];
 let prikey_arr=[];
 let use_name="";
 let user_pass="";
-let cids=[];
+let cids=[[]];
+let fileLinks=[];
 let walletId=0;
 // Get current directory name
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -280,7 +281,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, required: true },
   privatekey: { type: [String], unique: true, required: true },
   publickey: {type: [String], unique: true, required: true },
-  cids: {type: [String], unique: true}
+  cids: {type: [[String]], unique: true}
 });
 
 const User = mongoose.model("User", userSchema);
@@ -335,7 +336,11 @@ app.get("/forgot_password", (req, res) => {
 
 app.get("/upload_file", (req, res) => {
   walletId=req.query.walletId;
-  res.render("upload", { name: use_name });
+  if(isNaN(walletId)){
+    walletId=0;
+  }
+  console.log(parseInt(walletId));
+  res.render("upload", { name: use_name, cids: cids, walletno: walletId });
 });
 
 // Helper function to handle login (Admin or Regular User)
@@ -384,6 +389,49 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/show_link", async (req,res)=>{
+  try{
+    fileLinks=[];
+    const self_user=await User.findOne({username: use_name});
+    const cid_arr=self_user.cids[walletId];
+    for(const cid of cid_arr){
+      const response=await fetch(`http://10.200.241.97:4000/api/file/${cid}`);
+      if(!response.ok){
+        throw new Error(`Failed to fetch link for ${cid}: ${response.statusText}`);
+      }
+      const contentType = response.headers.get('Content-Type');
+      let fileExtension;
+      switch (contentType) {
+        case 'application/pdf':
+            fileExtension = 'pdf';
+            break;
+        case 'image/jpeg':
+            fileExtension = 'jpg';
+            break;
+        case 'image/png':
+            fileExtension = 'png';
+            break;
+        case 'text/plain':
+            fileExtension = 'txt';
+            break;
+        case 'application/octet-stream':
+            fileExtension = 'bin'; // Generic binary file
+            break;
+        // Add more content types as needed
+        default:
+            fileExtension = 'file'; // Fallback
+      }
+      const fileUrl = `http://10.200.241.97:4000/api/file/${cid}`;
+      fileLinks.push({ cid, filePath: fileUrl });
+    }
+    res.render("upload",{name: use_name,cids: cids, walletno: walletId, fileLinks: fileLinks});
+  }
+  catch(err){
+    console.error('Error fetching file links:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Signup Route
 app.post("/signup", async (req, res) => {
   const username=req.body.name;
@@ -414,7 +462,7 @@ app.post("/signup", async (req, res) => {
     // Create and save a new user
     const newUser = new User({ username: username, password: hashedPassword, email: email, privatekey: prikey_arr, publickey: pubkey_arr, cids: cids});
     await newUser.save();
-    res.redirect("/upload_file"); // Redirect to login after successful signup
+    res.redirect("/login"); // Redirect to login after successful signup
   } catch (err) {
     console.error("Error during signup:", err.message);
     res.render("signup", { response: "Signup failed. Try again." });
@@ -442,17 +490,63 @@ async function decryptCID(encryptCID,ivHex) {
   let decrypted=decipher.update(encryptCID,'hex','utf8');
   return decrypted;
 }
-app.post("/api/upload-cid",async (req,res)=>{
-  let { cid }=req.body;
-  console.log(cid);
-  cid=cid.toString();
-  if(!cid){
-    return res.status(400).send('CID is required');
+app.post("/api/upload-cid", async (req, res) => {
+  let { cid } = req.body;
+  console.log("CID received:", cid);
+
+  if (!cid) {
+      return res.status(400).send('CID is required');
   }
-  const sel_user=await User.findOne({username: use_name});
-  sel_user.cids.push(cid);
-  await sel_user.save();
+
+  try {
+    cid = cid.toString();
+
+    // Log and validate walletId
+    const walletIndex = parseInt(walletId, 10); // Ensure walletId is an integer
+    console.log("walletId:", walletId, "Parsed walletIndex:", walletIndex);
+
+    const sel_user = await User.findOne({ username: use_name });
+
+    if (!sel_user) {
+        console.error(`User with username ${use_name} not found.`);
+        return res.status(404).send('User not found');
+    }
+
+    // Ensure `cids` is initialized as a 2D array
+    if (!Array.isArray(sel_user.cids)) {
+        sel_user.cids = [];
+    }
+
+    // Initialize array at `walletIndex` if it doesn’t exist
+    if (!Array.isArray(sel_user.cids[walletIndex])) {
+        sel_user.cids[walletIndex] = [];
+    }
+
+    // Log cids structure before modification
+    console.log("cids before push:", JSON.stringify(sel_user.cids));
+
+    // Add the new CID
+    sel_user.cids[walletIndex].push(cid);
+
+    // Log cids structure after modification
+    console.log("cids after push:", JSON.stringify(sel_user.cids));
+
+    // Save the updated user document
+    const savedUser = await sel_user.save();
+
+    if (savedUser) {
+        console.log(`CID ${cid} added successfully to user ${use_name} under walletId ${walletIndex}`);
+        res.status(200).send('CID uploaded and saved successfully');
+    } else {
+        console.error("Failed to save user after CID update.");
+        res.status(500).send('Failed to save CID to database');
+    }
+  } catch (error) {
+      console.error('Error saving CID to database:', error);
+      res.status(500).send('Internal server error');
+  }
 });
+
 
 app.post("/reset_password",async (req,res)=>{
   const r_email = req.body.email;
@@ -608,6 +702,7 @@ app.get("/logout",async (req,res)=>{
   prikey_arr=[];
   cids=[];
   walletId=0;
+  fileLinks=[];
   res.redirect("/");
 });
 
