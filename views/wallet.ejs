@@ -54,7 +54,7 @@
   <div class="card-container">
     <% if(locals.wallets){ %>
         <% for(var i=0;i<wallets;i++){ %>
-            <a href="/upload_file" class="card">
+            <a href="/upload_file?walletId=<%= i %>" class="card">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjtIqc3HwZEVGgE4QDuI80950708UurqThkA&s" alt="Instagram">
                 <span>Wallet <%= i+1 %></span>
                 <br/>

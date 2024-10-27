@@ -358,10 +358,10 @@
         <div class="modal-content">
             <h1>Submit All Files</h1>
             <p class="finalMessage">The Name(s) and Description(s) have been successfully saved.</p>
-            <button id="finalSubmitButton" style="background-color: #261067;">Submit All</button>
+            <button id="finalSubmitButton" style="background-color: #261067;" onclick="sendfiles()">Submit All</button>
         </div>
     </div>
-
+    <div id="result"></div>
     <script>
         const uploadBox = document.getElementById('uploadBox');
         const fileInput = document.getElementById('fileInput');
@@ -384,6 +384,60 @@
             handleFiles(e.dataTransfer.files);
         });
 
+        async function sendCIDToBackend(cid) {
+        try{
+            const response = await fetch('/api/upload-cid', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ cid }),
+            });
+
+            if (!response.ok) {
+                console.error('Error sending CID to backend:', response.statusText);
+            } else {
+                console.log('CID sent successfully:', cid);
+            }}
+            catch(err){
+                console.log("Error: ",err.message);
+            }
+        }
+
+        async function sendfiles() {
+    if (filesArray.length === 0) {
+        alert('Please select at least one file.');
+        return;
+    }
+
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = ''; // Clear previous results
+
+    for (const file of filesArray) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('http://10.200.241.97:4000/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                resultDiv.innerHTML += `File ${file.name} uploaded successfully: CID: ${data.hash}, Size: ${file.size} bytes<br>`;
+                await sendCIDToBackend(data.hash);
+            } else {
+                const error = await response.json();
+                console.error('Upload error:', error);
+                resultDiv.innerHTML += `Error uploading file ${file.name}: ${error.message}<br>`;
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            resultDiv.innerHTML += `Network error: Could not upload file ${file.name}.<br>`;
+        }
+    }
+}
         function handleFiles(files) {
             Array.from(files).forEach(file => {
                 filesArray.push(file);

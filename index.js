@@ -243,7 +243,7 @@ import nodemailer from "nodemailer";
 import Web3 from 'web3';
 import cron from "cron";
 import { create } from "ipfs-http-client";
-
+import crypto from "crypto";
 // Initialize express app
 const app = express();
 const port = 3000;
@@ -253,6 +253,8 @@ let pubkey_arr=[];
 let prikey_arr=[];
 let use_name="";
 let user_pass="";
+let cids=[];
+let walletId=0;
 // Get current directory name
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const web3=new Web3();
@@ -261,7 +263,7 @@ app.set("view engine", "ejs");
 
 // Serve static files from the public directory
 app.use(express.static("public"));
-
+app.use(bodyParser.json());
 // Parse incoming requests with urlencoded payloads
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -278,6 +280,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, required: true },
   privatekey: { type: [String], unique: true, required: true },
   publickey: {type: [String], unique: true, required: true },
+  cids: {type: [String], unique: true}
 });
 
 const User = mongoose.model("User", userSchema);
@@ -331,6 +334,7 @@ app.get("/forgot_password", (req, res) => {
 });
 
 app.get("/upload_file", (req, res) => {
+  walletId=req.query.walletId;
   res.render("upload", { name: use_name });
 });
 
@@ -405,16 +409,49 @@ app.post("/signup", async (req, res) => {
 
     // Hash the password before storing
     const hashedPassword = await bcrypt.hash(password, 10);
-    prikey_arr=[prikey]
-    pubkey_arr=[pubkey]
+    prikey_arr=[prikey];
+    pubkey_arr=[pubkey];
     // Create and save a new user
-    const newUser = new User({ username: username, password: hashedPassword, email: email, privatekey: prikey_arr, publickey: pubkey_arr });
+    const newUser = new User({ username: username, password: hashedPassword, email: email, privatekey: prikey_arr, publickey: pubkey_arr, cids: cids});
     await newUser.save();
     res.redirect("/upload_file"); // Redirect to login after successful signup
   } catch (err) {
     console.error("Error during signup:", err.message);
     res.render("signup", { response: "Signup failed. Try again." });
   }
+});
+
+async function encryptCID(cid){
+  const iv = crypto.randomBytes(16);
+  const sel_user=await User.findOne({username: use_name});
+  const private_Key=sel_user.privatekey[walletId];
+  const cipher = crypto.createCipheriv('aes-256-cbc',private_Key,iv);
+  let encrypted = cipher.update(cid,'utf8','hex');
+  encrypted+=cipher.final('hex');
+  return{
+    encryptedCID: encrypted,
+    iv: iv.toString('hex')
+  };
+}
+
+async function decryptCID(encryptCID,ivHex) {
+  const ivBuffer = Buffer.from(ivHex,'hex');
+  const sel_user=await User.findOne({username: use_name});
+  const private_Key=sel_user.privatekey[walletId];
+  const decipher = crypto.createDecipheriv('aes-256-cbc',private_Key,ivBuffer);
+  let decrypted=decipher.update(encryptCID,'hex','utf8');
+  return decrypted;
+}
+app.post("/api/upload-cid",async (req,res)=>{
+  let { cid }=req.body;
+  console.log(cid);
+  cid=cid.toString();
+  if(!cid){
+    return res.status(400).send('CID is required');
+  }
+  const sel_user=await User.findOne({username: use_name});
+  sel_user.cids.push(cid);
+  await sel_user.save();
 });
 
 app.post("/reset_password",async (req,res)=>{
@@ -536,6 +573,8 @@ app.get("/profile",async (req,res)=>{
     email: user_email,
     wallet: wallets1.publickey.length,
     pubkey: wallets1.publickey,
+    prikey: wallets1.privatekey,
+    user_pass: user_pass,
   });
 })
 
@@ -550,6 +589,16 @@ app.get('/get-private-key/:walletId', async (req, res) => {
   }
 });
 
+app.get("/logout",async (req,res)=>{
+  use_name="";
+  user_email="";
+  user_pass="";
+  pubkey_arr=[];
+  prikey_arr=[];
+  cids=[];
+  walletId=0;
+  res.redirect("/");
+});
 
 // Start the server
 app.listen(port, () => {
