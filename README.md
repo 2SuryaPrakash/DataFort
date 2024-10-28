@@ -18,6 +18,11 @@ Technologies integrated to make the website up and running:-<br/>
 <br/>
 **Database Management**<br/>
 •MongoDB<br/>
+**Blockchain Frameworks**<br/>
+•Exonum
+**Decentralized Storage**<br/>
+- IPFS (InterPlanetary File System)<br/>
+
 
 ## Instructions
 ### 1.	Clone the Repository:
