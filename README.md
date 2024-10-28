@@ -1,8 +1,14 @@
 # DataFort Inc.
 ### We, DataFort Inc. are  presenting a solution to solve a major problem in the cybersecurity space.
->Our App provides a way to set up a scalable private- permissioned blockchain that helps us retain data integrity while counteracting the redundant nature of blockchains by using a local Interplanetary File System which works on the Proof of Authority consensus mechanism, keeping efficiency and speed at heart.
+>Our App provides a way to set up a scalable private-permissioned blockchain that helps us retain data integrity while counteracting the redundant nature of blockchains by using a local Interplanetary File System that works on the Proof of Authority consensus mechanism, keeping efficiency and speed at heart.
 
 >We provide a seamless yet secure way for private and government enterprises to store large amounts of data while preventing unauthorized access/ modifications. We believe that this would be especially useful for law enforcement, banking and healthcare where malicious actors looking to modify data can bring about catastrophic consequences.
+
+## Repository Structure
+•**Index.js**: This file serves as the main backend source code responsible for rendering all project web pages.<br/>
+•**views**: This folder contains HTML, CSS, and EJS files, each responsible for a specific web page's layout and functionality.<br/>
+•**assets**: Folder with images used throughout the application<br/>
+•**exonum_chain**: 
 
 ## Development
 Technologies integrated to make the website up and running:-<br/>
@@ -43,7 +49,6 @@ This will start the server and the website will work on your localhost.<br/>
 To view the website, go to:
 ```
 https://localhost:3000
-
 ```
 
 
