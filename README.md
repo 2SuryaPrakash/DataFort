@@ -21,7 +21,7 @@ Technologies integrated to make the website up and running:-<br/>
 **Blockchain Frameworks**<br/>
 •Exonum<br/>
 **Decentralized Storage**<br/>
-- IPFS (InterPlanetary File System)<br/>
+•IPFS (InterPlanetary File System)<br/>
 
 
 ## Instructions
