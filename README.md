@@ -36,7 +36,7 @@ Before you begin, ensure you have met the following requirements:
 
 - Node.js installed on your computer (preferably version 14 or higher)
 - npm (Node Package Manager) installed
-- ### Firewall Configuration
+- ## Firewall Configuration
 
 To set up your firewall for both IPFS and Exonum, allow the following ports:
 
