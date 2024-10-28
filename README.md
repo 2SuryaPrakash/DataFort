@@ -60,5 +60,5 @@ https://localhost:3000
 
 ## Important Notes
 
-Please read the separate README files located in the **[IPFS](./IPFS/ReadME.md)** and **[exonum_chain](./exonum_chain/ReadME.md)** directories for detailed instructions on setting up and configuring each component. These documents provide essential information tailored to help you work with IPFS and Exonum effectively.
+Please read the separate README files located in the **[IPFS](./IPFS/ReadMe.md)** and **[exonum_chain](./exonum_chain/ReadMe.md)** directories for detailed instructions on setting up and configuring each component. These documents provide essential information tailored to help you work with IPFS and Exonum effectively.
 
