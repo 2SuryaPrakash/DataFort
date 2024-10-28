@@ -4,6 +4,12 @@
 
 >We provide a seamless yet secure way for private and government enterprises to store large amounts of data while preventing unauthorized access/ modifications. We believe that this would be especially useful for law enforcement, banking and healthcare where malicious actors looking to modify data can bring about catastrophic consequences.
 
++ [Repository Structure](#repository)
++ [Development](#Development)
++ [Prerequistes](#Prerequistes)
++ [Instructions](#instructions)
++ [Important Notes](#important)
+
 ## Repository Structure
 •**Index.js**: This file contains the main backend source code responsible for rendering all project web pages.<br/>
 •**views**: This directory contains HTML, CSS, and EJS files, each responsible for a specific web page's layout and functionality.<br/>
