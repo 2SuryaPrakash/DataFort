@@ -1,7 +1,7 @@
 # Disclaimer: we thought of dockerizing it to make deployment easier but the docker image turned out to be too big. 
 # Instructions:
-# Download rustup-init.exe from https://rustup.rs
-# Run the installer and choose option 1 for default installation
+### Download rustup-init.exe from https://rustup.rs
+### Run the installer and choose option 1 for default installation
 
 # Verify installation
 rustup default stable
@@ -9,9 +9,9 @@ rustup update
 rustc --version
 cargo --version
 
-# Add Rust to PATH if not already added
-# Add to System Environment Variables:
-# %USERPROFILE%\.cargo\bin (usually gets added by default)
+### Add Rust to PATH if not already added
+### Add to System Environment Variables:
+### %USERPROFILE%\.cargo\bin (usually gets added by default)
 ```
 
 # Install Visual Studio Build Tools (around 6GB)
