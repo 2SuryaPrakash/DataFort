@@ -19,7 +19,7 @@ Technologies integrated to make the website up and running:-<br/>
 **Database Management**<br/>
 •MongoDB<br/>
 **Blockchain Frameworks**<br/>
-•Exonum
+•Exonum<br/>
 **Decentralized Storage**<br/>
 - IPFS (InterPlanetary File System)<br/>
 
