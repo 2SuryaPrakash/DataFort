@@ -6,7 +6,7 @@
 
 + [Repository Structure](#repository-structure)
 + [Development](#development)
-+ [Prerequistes](#prerequistes)
++ [Prerequistes](#prerequisites)
 + [Instructions](#instructions)
 + [Important Notes](#important-notes)
 
