@@ -4,11 +4,11 @@
 
 >We provide a seamless yet secure way for private and government enterprises to store large amounts of data while preventing unauthorized access/ modifications. We believe that this would be especially useful for law enforcement, banking and healthcare where malicious actors looking to modify data can bring about catastrophic consequences.
 
-+ [Repository Structure](#repository)
-+ [Development](#Development)
-+ [Prerequistes](#Prerequistes)
++ [Repository Structure](#repository-structure)
++ [Development](#development)
++ [Prerequistes](#prerequistes)
 + [Instructions](#instructions)
-+ [Important Notes](#important)
++ [Important Notes](#important-notes)
 
 ## Repository Structure
 •**Index.js**: This file contains the main backend source code responsible for rendering all project web pages.<br/>
