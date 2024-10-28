@@ -36,6 +36,45 @@ Before you begin, ensure you have met the following requirements:
 
 - Node.js installed on your computer (preferably version 14 or higher)
 - npm (Node Package Manager) installed
+- ### Firewall Configuration
+
+To set up your firewall for both IPFS and Exonum, allow the following ports:
+
+#### IPFS Firewall Rules
+
+**Inbound Rules:**
+- **TCP:**
+  - 4001 (IPFS swarm)
+  - 4002 (IPFS API)
+  - 5001 (IPFS gateway)
+  - 8080 (Optional, for additional services)
+  
+- **UDP:**
+  - 4001 (IPFS swarm)
+
+**Outbound Rules:**
+- **TCP:**
+  - 4001
+  - 4002
+  - 5001
+  - 8080
+
+- **UDP:**
+  - 4001
+
+#### Exonum Firewall Rules
+
+**Inbound Rules:**
+- **TCP:**
+  - 8080 (Exonum API)
+  - 8000 (Exonum node service, if applicable)
+  - 8001 (Exonum websocket service, if applicable)
+
+**Outbound Rules:**
+- **TCP:**
+  - 8080
+  - 8000
+  - 8001
 
 ## Instructions
 ### 1.	Clone the Repository:
