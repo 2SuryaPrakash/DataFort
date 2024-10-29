@@ -1,8 +1,9 @@
 # This is the readme file for setting up the IPFS cluster.
-```
+
 Install node.js/npm
 Install kubo ipfs client at : https://dist.ipfs.tech/#kubo
-```
+Add the directory containing ipfs.exe to Path in environment variables.
+
 ## For setting up the bootstrap node:
 
 
