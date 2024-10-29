@@ -95,7 +95,7 @@ npm install
 ```
 This will install all the dependencies.
 
-### Note. Every time you interact with the IPFS server, update the api_link variable in index.js and upload.js with the correct IP address of the server.
+### Note. Every time you are initializing with the IPFS server, update the api_link variable in index.js,upload.ejs and privatenode.js with the current IP address of the IPFS host server.
 ```bash
 ipconfig
 ```
