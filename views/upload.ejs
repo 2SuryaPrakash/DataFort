@@ -396,6 +396,8 @@
     <script>
         let wall_cid = `<%= cids[walletno] %>`;
 
+        const API_LINK = '192.168.0.196';
+
         const uploadBox = document.getElementById('uploadBox');
         const fileInput = document.getElementById('fileInput');
         const fileList = document.getElementById('fileList');
@@ -419,7 +421,7 @@
 
         async function sendCIDToBackend(cid) {
             try {
-                const response = await fetch('/api/upload-cid', {
+                const response = await fetch('http://${API_LINK}:4000/api/upload-cid', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -452,7 +454,7 @@
                 formData.append('file', file);
 
                 try {
-                    const response = await fetch('http://10.200.241.97:4000/api/upload', {
+                    const response = await fetch(`http://192.168.0.196:4000/api/upload`, {
                         method: 'POST',
                         body: formData
                     });
