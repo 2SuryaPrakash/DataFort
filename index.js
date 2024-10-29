@@ -163,7 +163,7 @@ app.post("/show_link", async (req, res) => {
     const self_user = await User.findOne({ username: use_name });
     const cid_arr = self_user.cids[walletId];
     for (const cid of cid_arr) {
-      const response = await fetch(`http://192.168.0.196:4000/api/file/${cid}`);
+      const response = await fetch(`http://${API_LINK}:4000/api/file/${cid}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch link for ${cid}: ${response.statusText}`);
       }
@@ -189,7 +189,7 @@ app.post("/show_link", async (req, res) => {
         default:
           fileExtension = 'file'; // Fallback
       }
-      const fileUrl = `http://192.168.0.196:4000/api/file/${cid}`;
+      const fileUrl = `http://${API_LINK}:4000/api/file/${cid}`;
       fileLinks.push({ cid, filePath: fileUrl });
     }
     res.render("upload", { name: use_name, cids: cids, walletno: walletId, fileLinks: fileLinks, response: "" });

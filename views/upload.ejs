@@ -421,7 +421,7 @@
 
         async function sendCIDToBackend(cid) {
             try {
-                const response = await fetch('http://${API_LINK}:4000/api/upload-cid', {
+                const response = await fetch('/api/upload-cid', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -454,7 +454,7 @@
                 formData.append('file', file);
 
                 try {
-                    const response = await fetch(`http://192.168.0.196:4000/api/upload`, {
+                    const response = await fetch(`http://${API_LINK}:4000/api/upload`, {
                         method: 'POST',
                         body: formData
                     });
