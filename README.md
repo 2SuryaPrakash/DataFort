@@ -85,7 +85,7 @@ To set up your firewall for both IPFS and Exonum, allow the following ports:
 ## Instructions
 ### 1.	Clone the Repository:
 ```bash
-git clone https://github.com/2SuryaPrakash/DataFort-Inc.
+git clone https://github.com/2SuryaPrakash/DataFort
 ```
 ### 2. Install requirements
 Ensure that your device has **npm** and **node** installed.
