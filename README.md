@@ -94,6 +94,18 @@ If it is installed,
 npm install
 ```
 This will install all the dependencies.
+
+### Note. Every time you interact with the IPFS server, update the api_link variable in index.js and upload.js with the correct IP address of the server.
+```bash
+ipconfig
+```
+Copy the IPv4 Address and assign it to the API_LINK variable.
+
+```bash
+node file_server.js
+```
+This will start the ipfs server.
+
 ```bash
 node index.js
 ```
